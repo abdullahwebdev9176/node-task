@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 const path = require('path');
 const handlebars = require('express-handlebars')
 const indexRouter = require('./routes/index');
+const feedPath = require('./routes/boats-feed')
 
 
 connectDB();
@@ -37,6 +38,7 @@ app.set('views', frontendpages);
 
 // Routes
 app.use('/', indexRouter);
+app.use('/api', feedPath);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
