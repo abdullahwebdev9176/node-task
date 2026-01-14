@@ -4,9 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-  "start": "node app.js",
-  "dev": "nodemon app.js"
-},
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abdullahwebdev9176/node-task.git"
@@ -21,6 +21,8 @@
     "colors": "^1.4.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "express-handlebars": "^8.0.3",
+    "hbs": "^4.2.0",
     "mongodb": "^7.0.0"
   }
 }
