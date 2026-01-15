@@ -3,31 +3,26 @@ const express = require('express');
 const router = express.Router();
 const xml2js = require('xml2js');
 
+const { getDB } = require('../config/db')
 
 router.get('/boats-feed', async (req, res) => {
-
     try {
-        
-        const response = await axios.get('https://callersiq.com/cali_marine_huntington_beach_xml_feed')
 
+        const response = await axios.get('https://callersiq.com/cali_marine_huntington_beach_xml_feed');
         const xmlData = response.data;
 
         const parser = new xml2js.Parser({ explicitArray: false });
-
         const result = await parser.parseStringPromise(xmlData);
 
-        const boats = result?.inventory.item || [];
+        const boats = result?.inventory?.item || [];
 
-        console.log(boats);
+        let boatsArray = [];
 
-        for(let boat of boats){
+        for (let boat of boats) {
 
-            const boatTitle =  `${boat.year} ${boat.make} ${boat.model}`;
-
+            const boatTitle = `${boat.year} ${boat.make} ${boat.model}`;
             const all_images = Object.values(boat.inventory_images ? boat.inventory_images : {});
-
             const thumbnail_image = all_images.length > 0 ? all_images[0] : null;
-            
 
             const boatData = {
                 id: boat.id,
@@ -50,13 +45,24 @@ router.get('/boats-feed', async (req, res) => {
                 banner: boat.banner,
                 boat_images: all_images,
                 thumbnail_image: thumbnail_image
-            }
+            };
+
+            boatsArray.push(boatData);
         }
 
-        res.json({ boats });
+        const db = getDB();
+        const collection = db.collection('boats');
+        const deleteData = await collection.deleteMany({});
+        const insertedData = await collection.insertMany(boatsArray);
+
+        res.json({
+            message: "Boats inserted successfully",
+            count: insertedData.insertedCount,
+            boatsArray: boatsArray
+        });
 
     } catch (error) {
-
+        console.error(error);
     }
 });
 

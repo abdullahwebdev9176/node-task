@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
-const connectDB = require('./config/db');
+const { connectDB } = require('./config/db');
 const path = require('path');
 const handlebars = require('express-handlebars')
 const indexRouter = require('./routes/index');
