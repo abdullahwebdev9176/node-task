@@ -17,6 +17,7 @@ const runFeed = async () => {
         const boats = result?.inventory?.item || [];
 
         let boatsArray = [];
+        let sold_boats_array = [];
 
         for (let boat of boats) {
 
@@ -48,14 +49,22 @@ const runFeed = async () => {
             };
 
             boatsArray.push(boatData);
+
+            if(boat.sale_status && boat.sale_status.toLowerCase().includes('sold')) {
+                sold_boats_array.push(boatData);
+            }else{
+                boatsArray.push(boatData);
+            }
         }
 
         const db = getDB();
         const collection = db.collection('boats');
+        const sold_boats = db.collection('sold-boats');
         const deleteData = await collection.deleteMany({});
         const insertedData = await collection.insertMany(boatsArray);
+        const insertedSoldBoatsData = await sold_boats.insertMany(sold_boats_array);
 
-        return insertedData
+        return { insertedData, insertedSoldBoatsData };
 
     } catch (error) {
         console.error(error);
@@ -68,7 +77,8 @@ router.get('/boats-feed', async (req, res) => {
     console.log('Feed run result:', result);
     res.json({ 
         message: 'Boats feed processed',
-        insertedCount: result.insertedCount,
+        insertedCount: result.insertedData.count,
+        insertedSoldCount: result.insertedSoldBoatsData.count,
         result: result
 
      });
