@@ -63,7 +63,12 @@ const runFeed = async () => {
         const insertedData = await collection.insertMany(boatsArray);
         const insertedSoldBoatsData = await sold_boats.insertMany(sold_boats_array);
 
-        return { insertedData, insertedSoldBoatsData };
+        return { 
+             insertedData,
+             insertedSoldBoatsData,    
+             boatsArray,
+             sold_boats_array
+            };
 
     } catch (error) {
         console.error(error);
@@ -72,14 +77,11 @@ const runFeed = async () => {
 
 router.get('/boats-feed', async (req, res) => {
     const result = await runFeed();
-
-    console.log('Feed run result:', result);
     res.json({ 
         message: 'Boats feed processed',
         insertedCount: result.insertedData.insertedCount,
         insertedSoldCount: result.insertedSoldBoatsData.insertedCount,
-        result: result.insertedData,
-
+        result: result.boatsArray
      });
 });
 
