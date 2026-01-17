@@ -5,7 +5,7 @@ const xml2js = require('xml2js');
 
 const { getDB } = require('../config/db')
 
-router.get('/boats-feed', async (req, res) => {
+const runFeed = async () => {
     try {
 
         const response = await axios.get('https://callersiq.com/cali_marine_huntington_beach_xml_feed');
@@ -55,15 +55,23 @@ router.get('/boats-feed', async (req, res) => {
         const deleteData = await collection.deleteMany({});
         const insertedData = await collection.insertMany(boatsArray);
 
-        res.json({
-            message: "Boats inserted successfully",
-            count: insertedData.insertedCount,
-            boatsArray: boatsArray
-        });
+        return insertedData
 
     } catch (error) {
         console.error(error);
     }
+}
+
+router.get('/boats-feed', async (req, res) => {
+    const result = await runFeed();
+
+    console.log('Feed run result:', result);
+    res.json({ 
+        message: 'Boats feed processed',
+        insertedCount: result.insertedCount,
+        result: result
+
+     });
 });
 
-module.exports = router
+module.exports = { router, runFeed };

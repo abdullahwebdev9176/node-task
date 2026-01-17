@@ -5,7 +5,8 @@ const { connectDB } = require('./config/db');
 const path = require('path');
 const handlebars = require('express-handlebars')
 const indexRouter = require('./routes/index');
-const feedPath = require('./routes/boats-feed')
+const { router: feedPath } = require('./routes/boats-feed')
+const cronFeed = require('./cron/cron-feed');
 
 
 connectDB();
