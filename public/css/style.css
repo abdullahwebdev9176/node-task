@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.title-heading {
+    text-align: center;
+}
+
+.home-slider .item {
+    position: relative;
+    padding-top: 45%;
+}
+
+.home-slider .item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+}
+
+.boats-image {
+    position: relative;
+    padding-top: 45%;
+}
+
+.boats-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.boat-card-body{
+    padding: 15px 0;
+}
+.boat-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: black;
+    font-family: "Inter", sans-serif;
+}
+.boat-card-title a{
+    color: black !important;
+    text-decoration: none !important;
+}
+.boat-card-title a:hover{
+    color: black !important;
+    text-decoration: none !important;
+}
+.boat-card-price {
+    font-size: 16px;
+    font-weight: 400;
+    color: black;
+    font-family: "Inter", sans-serif;
+}
