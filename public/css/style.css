@@ -20,7 +20,7 @@
 
 .boats-image {
     position: relative;
-    padding-top: 45%;
+    padding-top: 60%;
 }
 
 .boats-image img {
@@ -31,26 +31,53 @@
     height: 100%;
     object-fit: cover;
 }
-.boat-card-body{
+
+.boat-card-body {
     padding: 15px 0;
 }
+
 .boat-card-title {
     font-size: 20px;
     font-weight: 700;
     color: black;
     font-family: "Inter", sans-serif;
 }
-.boat-card-title a{
+
+.boat-card-title a {
     color: black !important;
     text-decoration: none !important;
 }
-.boat-card-title a:hover{
+
+.boat-card-title a:hover {
     color: black !important;
     text-decoration: none !important;
 }
+
 .boat-card-price {
     font-size: 16px;
     font-weight: 400;
     color: black;
     font-family: "Inter", sans-serif;
+}
+
+.filter-content-wrapper label {
+    font-size: 14px;
+    font-weight: 500;
+    color: black;
+    font-family: "Inter", sans-serif;
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.filter-content-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.inventory-sec {
+    padding-top: 100px;
+    width: calc(100% - 15%);
+    margin: 0 auto;
 }

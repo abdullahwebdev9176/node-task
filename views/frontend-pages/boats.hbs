@@ -1,24 +1,80 @@
-<div class="container-fluid">
-    <div class="row">
-        {{#each boats}}
+<div class="inventory-sec">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-lg-4">
+                <div class="boats-sidebar">
+                    <h3>Boat Filters</h3>
+                    <div class="filter-condition">
+                        <div class="filter-title">
+                            <h4>Condition</h4>
+                        </div>
 
-        <div class="col-lg-4">
-            <div class="boats-image">
-                <a href="/boat-details/{{this._id}}">
-                    <img src="{{this.thumbnail_image}}" alt="{{this.title}}">
-                </a>
+                        <div class="filter-content-wrapper">
+                            <label>
+                                <input type="checkbox" id="condition-all" value="all"
+                                    onclick="handleConditionClick(event)">
+                                All
+                            </label>
+
+                            <label>
+                                <input type="checkbox" class="condition-item" value="New"
+                                    onclick="handleConditionClick(event)">
+                                New
+                            </label>
+
+                            <label>
+                                <input type="checkbox" class="condition-item" value="Used"
+                                    onclick="handleConditionClick(event)">
+                                Used
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-condition">
+                        <div class="filter-title">
+                            <h4>Brand</h4>
+                        </div>
+
+                        <div class="filter-content-wrapper">
+
+                            <label>
+                                <input type="checkbox" class="brand-item" value="Yamaha"
+                                    onclick="handleBrandClick(event)"> Yamaha
+                            </label>
+                            <label>
+                                <input type="checkbox" class="brand-item" value="SeaRay"
+                                    onclick="handleBrandClick(event)"> SeaRay
+                            </label>
+
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="boat-card-body">
-                <h3 class="boat-card-title"><a href="/boat-details/{{this._id}}">{{this.title}}</a></h3>
-                
-                {{#if this.price}}
-                <p class="boat-card-price">Price: {{this.price}}</p>
-                {{else}}
-                <p class="boat-card-price">Price: Call For Price</p>
-                {{/if}}
+            <div class="col-xl-9 col-lg-8">
+                <div class="row">
+                    {{#each boats}}
+
+                    <div class="col-lg-4">
+                        <div class="boats-image">
+                            <a href="/boat-details/{{this._id}}">
+                                <img src="{{this.thumbnail_image}}" alt="{{this.title}}">
+                            </a>
+                        </div>
+                        <div class="boat-card-body">
+                            <h3 class="boat-card-title"><a href="/boat-details/{{this._id}}">{{this.title}}</a></h3>
+
+                            {{#if this.price}}
+                            <p class="boat-card-price">Price: {{this.price}}</p>
+                            {{else}}
+                            <p class="boat-card-price">Price: Call For Price</p>
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    {{/each}}
+                </div>
             </div>
         </div>
-
-        {{/each}}
     </div>
 </div>
