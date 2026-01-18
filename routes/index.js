@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/db');
 const { getStyles } = require('../public/js/common');
+const { ObjectId } = require('mongodb');
 
 router.get('/', (req, res) => {
 
@@ -23,7 +24,6 @@ router.get('/boats-for-sale', async (req, res) => {
 
     const styles = getStyles();
 
-    // console.log(boats);
 
     res.render('boats', {
         title: 'Boats For Sale',
@@ -31,6 +31,26 @@ router.get('/boats-for-sale', async (req, res) => {
         style: styles
     });
 })
+
+router.get('/boat-details/:id', async (req, res) => {
+    const db = getDB();
+
+    const result = await db.collection('boats').findOne({
+        _id: new ObjectId(req.params.id)
+    });
+
+    console.log(result);
+
+    const styles = getStyles();
+
+    res.render('boat-details', {
+        title: 'Boat Details',
+        result: result,
+        styles
+    });
+});
+
+
 
 
 module.exports = router;
