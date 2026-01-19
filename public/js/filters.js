@@ -1,3 +1,6 @@
+let checkedItemsValues = [];
+let selectedBrands = [];
+
 function handleConditionClick(e) {
 
     const clicked = e.target.value;
@@ -18,9 +21,11 @@ function handleConditionClick(e) {
         return i.checked;
     })
 
-    const checkedItemsValues = checkedItems.map((i) => {
+    checkedItemsValues = checkedItems.map((i) => {
         return i.value;
     })
+
+    fetchedBoats()
 
     console.log(checkedItemsValues)
 }
@@ -31,10 +36,40 @@ function handleBrandClick(e) {
 
     const brandArray = [...brandItems];
 
-    const selectedBrands = brandArray
+    selectedBrands = brandArray
         .filter(item => item.checked)
         .map(item => item.value);
 
+        fetchedBoats()
     console.log(selectedBrands)
 
+}
+
+async function fetchedBoats() {
+
+    const payload = {
+        condition: checkedItemsValues,
+        brands: selectedBrands
+    }
+    try {
+        const response = await fetch('/get-boats', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            console.log('Boats fetched');
+            const data = await response.json();
+            console.log(data);
+            // renderBoats(data.boats);
+        } else {
+            console.error('Boat fetching failed');
+        }
+        
+    } catch (error) {
+        console.error('Error fetching boats:', error);
+    }
 }
