@@ -16,6 +16,30 @@ router.get('/', (req, res) => {
     });
 })
 
+router.post('/get-boats', async (req, res) => {
+    const db = getDB();
+
+    console.log(req.body);
+
+    const { condition, brands } = req.body;
+
+    let query = {};
+    if (condition.length > 0) {
+        query.condition = { $in: condition };
+    }
+    if (brands.length > 0) {
+        query.make = { $in: brands };
+    }
+    const boats = await db.collection('boats').find(query).toArray();
+
+    console.log(boats);
+
+    res.json({
+        boats: boats
+    });
+
+})
+
 router.get('/boats-for-sale', async (req, res) => {
 
     const db = getDB();

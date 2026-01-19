@@ -48,22 +48,7 @@
                 <div class="row">
                     {{#each boats}}
 
-                    <div class="col-lg-4">
-                        <div class="boats-image">
-                            <a href="/boat-details/{{this._id}}">
-                                <img src="{{this.thumbnail_image}}" alt="{{this.title}}">
-                            </a>
-                        </div>
-                        <div class="boat-card-body">
-                            <h3 class="boat-card-title"><a href="/boat-details/{{this._id}}">{{this.title}}</a></h3>
-
-                            {{#if this.price}}
-                            <p class="boat-card-price">Price: {{this.price}}</p>
-                            {{else}}
-                            <p class="boat-card-price">Price: Call For Price</p>
-                            {{/if}}
-                        </div>
-                    </div>
+                        {{> boat-card}}
 
                     {{/each}}
                 </div>

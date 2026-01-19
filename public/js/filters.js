@@ -64,7 +64,7 @@ async function fetchedBoats() {
             console.log('Boats fetched');
             const data = await response.json();
             console.log(data);
-            // renderBoats(data.boats);
+            renderBoats(data.boats);
         } else {
             console.error('Boat fetching failed');
         }
