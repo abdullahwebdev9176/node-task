@@ -22,12 +22,18 @@ router.get('/boats-for-sale', async (req, res) => {
 
     const boats = await db.collection('boats').find().toArray();
 
+    const brands = [...new Set(boats.map(boat => boat.make))];
+    const condition = [...new Set(boats.map(boat => boat.condition))];
+
+
     const styles = getStyles();
 
 
     res.render('boats', {
         title: 'Boats For Sale',
         boats: boats,
+        brands: brands,
+        condition: condition,
         style: styles
     });
 })

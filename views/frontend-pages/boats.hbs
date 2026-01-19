@@ -15,18 +15,14 @@
                                     onclick="handleConditionClick(event)">
                                 All
                             </label>
-
+                            {{#each condition}}
                             <label>
-                                <input type="checkbox" class="condition-item" value="New"
+                                <input type="checkbox" class="condition-item" value="{{this}}"
                                     onclick="handleConditionClick(event)">
-                                New
+                                {{this}}
                             </label>
+                            {{/each}}
 
-                            <label>
-                                <input type="checkbox" class="condition-item" value="Used"
-                                    onclick="handleConditionClick(event)">
-                                Used
-                            </label>
                         </div>
                     </div>
 
@@ -36,15 +32,12 @@
                         </div>
 
                         <div class="filter-content-wrapper">
-
-                            <label>
-                                <input type="checkbox" class="brand-item" value="Yamaha"
-                                    onclick="handleBrandClick(event)"> Yamaha
-                            </label>
-                            <label>
-                                <input type="checkbox" class="brand-item" value="SeaRay"
-                                    onclick="handleBrandClick(event)"> SeaRay
-                            </label>
+                            {{#each brands}}
+                                <label>
+                                    <input type="checkbox" class="brand-item" value="{{this}}"
+                                        onclick="handleBrandClick(event)"> {{this}}
+                                </label>
+                            {{/each}}
 
                         </div>
                     </div>

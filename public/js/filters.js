@@ -1,8 +1,7 @@
 function handleConditionClick(e) {
-    // Kaun click hua
+
     const clicked = e.target.value;
 
-    // All checkbox aur baaki items
     const all = document.getElementById('condition-all');
     const items = document.querySelectorAll('.condition-item');
 
