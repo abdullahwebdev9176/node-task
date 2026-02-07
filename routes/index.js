@@ -21,7 +21,7 @@ router.post('/get-boats', async (req, res) => {
 
     console.log(req.body);
 
-    const { condition, brands, models } = req.body;
+    const { condition, brands, models, lengthRange } = req.body;
 
     let query = {};
     if (condition.length > 0) {
@@ -33,6 +33,13 @@ router.post('/get-boats', async (req, res) => {
     if (models.length > 0) {
         query.model = { $in: models };
     }
+    if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
+        query.length = { 
+            $gte: lengthRange.min.toString(), 
+            $lte: lengthRange.max.toString() 
+        };
+    }
+    
     const boats = await db.collection('boats').find(query).toArray();
 
     console.log(boats);

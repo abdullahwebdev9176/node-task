@@ -1,6 +1,7 @@
 let checkedItemsValues = [];
 let selectedBrands = [];
 let selectedModels = [];
+let selectedLengthRange = { min: 0, max: 100 };
 
 function handleConditionClick(e) {
 
@@ -66,7 +67,8 @@ async function fetchedBoats() {
     const payload = {
         condition: checkedItemsValues,
         brands: selectedBrands,
-        models: selectedModels
+        models: selectedModels,
+        lengthRange: selectedLengthRange
     }
     try {
         const response = await fetch('/get-boats', {
@@ -98,6 +100,9 @@ $(document).ready(function () {
         let minLength = $("#minVal").data("minlength") || 0;
         let maxLength = $("#maxVal").data("maxlength") || 100;
 
+        // Initialize selected length range
+        selectedLengthRange = { min: minLength, max: maxLength };
+
         $("#rangeSlider").slider({
             range: true,
             min: minLength,
@@ -108,6 +113,15 @@ $(document).ready(function () {
             slide: function (event, ui) {
                 $("#minVal").text(ui.values[0]);
                 $("#maxVal").text(ui.values[1]);
+                
+                // Update selected length range
+                selectedLengthRange = {
+                    min: ui.values[0],
+                    max: ui.values[1]
+                };
+                
+                // Trigger filtering
+                fetchedBoats();
             }
         });
     });
