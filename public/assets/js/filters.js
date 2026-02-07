@@ -81,7 +81,13 @@ async function fetchedBoats() {
             console.log('Boats fetched');
             const data = await response.json();
             console.log(data);
+            let boatLength = data.boats.length;
+            $('#boat-count').text(`${boatLength} boats found`);
             renderBoats(data.boats);
+
+            if (data.boats.length === 0) {
+                $('#boat-listings').html('<p class="text-center">No boats found.</p>');
+            }
         } else {
             console.error('Boat fetching failed');
         }
