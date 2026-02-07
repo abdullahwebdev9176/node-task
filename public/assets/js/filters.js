@@ -20,7 +20,13 @@ function resetFilters() {
      selectedModels = [];
      selectedLengthRange = { min: minLength, max: maxLength };
 
-    fetchedBoats()
+    if ($("#rangeSlider").length) {
+        $("#rangeSlider").slider("values", [minLength, maxLength]);
+        $("#minVal").text(minLength);
+        $("#maxVal").text(maxLength);
+    }
+
+    fetchedBoats();
 }
 
 function handleConditionClick(e) {
@@ -124,7 +130,6 @@ $(document).ready(function () {
         let minLength = $("#minVal").data("minlength") || 0;
         let maxLength = $("#maxVal").data("maxlength") || 100;
 
-        // Initialize selected length range
         selectedLengthRange = { min: minLength, max: maxLength };
 
         $("#rangeSlider").slider({
@@ -138,13 +143,11 @@ $(document).ready(function () {
                 $("#minVal").text(ui.values[0]);
                 $("#maxVal").text(ui.values[1]);
                 
-                // Update selected length range
                 selectedLengthRange = {
                     min: ui.values[0],
                     max: ui.values[1]
                 };
                 
-                // Trigger filtering
                 fetchedBoats();
             }
         });
