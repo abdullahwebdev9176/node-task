@@ -21,6 +21,8 @@ const runFeed = async () => {
 
         for (let boat of boats) {
 
+            const boatMake = boat.make ? boat.make.trim() : '';
+
             const boatTitle = `${boat.year} ${boat.make} ${boat.model}`;
             const all_images = Object.values(boat.inventory_images ? boat.inventory_images : {});
             const thumbnail_image = all_images.length > 0 ? all_images[0] : '/assets/images/coming-soon-img.jpg';
@@ -29,7 +31,7 @@ const runFeed = async () => {
                 id: boat.id,
                 title: boatTitle,
                 description: boat.description,
-                make: boat.make,
+                make: boatMake,
                 model: boat.model,
                 year: boat.year,
                 price: boat.price,

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/db');
 const { ObjectId } = require('mongodb');
-const { getStyles } = require('../public/assets/js/assetHelper');
+const { getStyles, jQueryUIStyle, jQueryUIScript } = require('../public/assets/js/assetHelper');
 
 router.get('/', (req, res) => {
 
@@ -49,12 +49,14 @@ router.get('/boats-for-sale', async (req, res) => {
 
     const boats = await db.collection('boats').find().toArray();
 
+    console.log(boats);
+
     const brands = [...new Set(boats.map(boat => boat.make.trim()))];
     const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
     const models = [...new Set(boats.map(boat => boat.model.trim()))];
 
-    
-    const styles = getStyles();
+    const styles = [...getStyles(), ...jQueryUIStyle()];
+    const scripts = [...jQueryUIScript()];
 
 
     res.render('boats', {
@@ -63,7 +65,8 @@ router.get('/boats-for-sale', async (req, res) => {
         brands: brands,
         condition: condition,
         models: models,
-        style: styles
+        style: styles,
+        scripts: scripts
     });
 })
 
