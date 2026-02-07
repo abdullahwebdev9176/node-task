@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/db');
 const { ObjectId } = require('mongodb');
-const { getStyles, getJquery, jQueryUIScript, jQueryUIStyle } = require('../helpers/assetHelper');
+const { getStyles, getJquery, jQueryUIScript, jQueryUIStyle, getFilter } = require('../helpers/assetHelper');
 
 router.get('/', (req, res) => {
 
@@ -68,7 +68,7 @@ router.get('/boats-for-sale', async (req, res) => {
     console.log('max length',maxLength); 
 
     const styles = [...jQueryUIStyle(), ...getStyles()];
-    const scripts = [...getJquery(), ...jQueryUIScript()];
+    const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
 
 
     res.render('boats', {

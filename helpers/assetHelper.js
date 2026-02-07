@@ -15,6 +15,9 @@ const getJquery = () => {
 const jQueryUIStyle = () => {
     return ['https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css'];
 }
+const getFilter = () => {
+    return ['/assets/js/filters.js'];
+}
 
 
 
@@ -22,5 +25,6 @@ module.exports = {
     getStyles,
     jQueryUIScript,
     jQueryUIStyle,
-    getJquery
+    getJquery,
+    getFilter
 }

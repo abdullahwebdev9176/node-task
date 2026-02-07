@@ -28,8 +28,6 @@ function handleConditionClick(e) {
     })
 
     fetchedBoats()
-
-    console.log(checkedItemsValues)
 }
 
 function handleBrandClick(e) {
