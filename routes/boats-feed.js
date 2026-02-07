@@ -23,7 +23,7 @@ const runFeed = async () => {
 
             const boatTitle = `${boat.year} ${boat.make} ${boat.model}`;
             const all_images = Object.values(boat.inventory_images ? boat.inventory_images : {});
-            const thumbnail_image = all_images.length > 0 ? all_images[0] : null;
+            const thumbnail_image = all_images.length > 0 ? all_images[0] : '/assets/images/coming-soon-img.jpg';
 
             const boatData = {
                 id: boat.id,

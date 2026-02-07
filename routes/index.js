@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/db');
-const { getStyles } = require('../public/js/common');
 const { ObjectId } = require('mongodb');
+const { getStyles } = require('../public/assets/js/assetHelper');
 
 router.get('/', (req, res) => {
 
@@ -21,7 +21,7 @@ router.post('/get-boats', async (req, res) => {
 
     console.log(req.body);
 
-    const { condition, brands } = req.body;
+    const { condition, brands, models } = req.body;
 
     let query = {};
     if (condition.length > 0) {
@@ -29,6 +29,9 @@ router.post('/get-boats', async (req, res) => {
     }
     if (brands.length > 0) {
         query.make = { $in: brands };
+    }
+    if (models.length > 0) {
+        query.model = { $in: models };
     }
     const boats = await db.collection('boats').find(query).toArray();
 
@@ -46,10 +49,11 @@ router.get('/boats-for-sale', async (req, res) => {
 
     const boats = await db.collection('boats').find().toArray();
 
-    const brands = [...new Set(boats.map(boat => boat.make))];
-    const condition = [...new Set(boats.map(boat => boat.condition))];
+    const brands = [...new Set(boats.map(boat => boat.make.trim()))];
+    const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
+    const models = [...new Set(boats.map(boat => boat.model.trim()))];
 
-
+    
     const styles = getStyles();
 
 
@@ -58,6 +62,7 @@ router.get('/boats-for-sale', async (req, res) => {
         boats: boats,
         brands: brands,
         condition: condition,
+        models: models,
         style: styles
     });
 })

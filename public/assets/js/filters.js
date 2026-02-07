@@ -1,5 +1,6 @@
 let checkedItemsValues = [];
 let selectedBrands = [];
+let selectedModels = [];
 
 function handleConditionClick(e) {
 
@@ -45,11 +46,27 @@ function handleBrandClick(e) {
 
 }
 
+function handleModelClick(e) {
+    const modelItems = document.querySelectorAll('.model-item');
+
+    const modelArray = [...modelItems];
+
+    selectedModels = modelArray.filter((item) => {
+        return item.checked;
+    }).map((item) => {
+        return item.value;
+    })
+
+    fetchedBoats();
+
+}
+
 async function fetchedBoats() {
 
     const payload = {
         condition: checkedItemsValues,
-        brands: selectedBrands
+        brands: selectedBrands,
+        models: selectedModels
     }
     try {
         const response = await fetch('/get-boats', {

@@ -42,6 +42,22 @@
                         </div>
                     </div>
 
+                    <div class="filter-condition">
+                        <div class="filter-title">
+                            <h4>Models</h4>
+                        </div>
+
+                        <div class="filter-content-wrapper">
+                            {{#each models}}
+                                <label>
+                                    <input type="checkbox" class="model-item" value="{{this}}"
+                                        onclick="handleModelClick(event)"> {{this}}
+                                </label>
+                            {{/each}}
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div class="col-xl-9 col-lg-8">
