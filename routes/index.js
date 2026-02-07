@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/db');
 const { ObjectId } = require('mongodb');
-const { getStyles, jQueryUIStyle, jQueryUIScript } = require('../helpers/assetHelper');
+const { getStyles, getJquery, jQueryUIScript, jQueryUIStyle } = require('../helpers/assetHelper');
 
 router.get('/', (req, res) => {
 
@@ -61,7 +61,7 @@ router.get('/boats-for-sale', async (req, res) => {
     console.log('max length',maxLength); 
 
     const styles = [...getStyles(), ...jQueryUIStyle()];
-    // const scripts = [...jQueryUIScript()];
+    const scripts = [...jQueryUIScript(), ...getJquery()];
 
 
     res.render('boats', {
@@ -73,7 +73,7 @@ router.get('/boats-for-sale', async (req, res) => {
         minLength,
         maxLength,
         style: styles,
-        scripts: 'https://code.jquery.com/ui/1.13.3/jquery-ui.min.js'
+        scripts: scripts
     });
 })
 

@@ -63,17 +63,16 @@ function handleModelClick(e) {
 
 $(function() {
     $("#rangeSlider").slider({
-        range: true,                // ✅ this creates two handles
-        min: 0,                     // minimum value
-        max: 100,                   // maximum value
-        values: [20, 80],           // starting values for two handles
-        step: 1,                    
+        range: true,             
+        min: 0,                  
+        max: 100,                
+        values: [20, 80],        
+        step: 1,                 
 
         slide: function(event, ui) {
-            $("#minVal").text(ui.values[0]);  // left handle
-            $("#maxVal").text(ui.values[1]);  // right handle
+            $("#minVal").text(ui.values[0]);
+            $("#maxVal").text(ui.values[1]);
 
-            // Optional: filter items based on range
             $(".item").each(function() {
                 let value = Number($(this).data("value"));
                 if(value >= ui.values[0] && value <= ui.values[1]){

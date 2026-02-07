@@ -19,5 +19,6 @@ const getJquery = () => {
 module.exports = {
     getStyles,
     jQueryUIScript,
-    jQueryUIStyle
-};
+    jQueryUIStyle,
+    getJquery
+}
