@@ -60,8 +60,8 @@ router.get('/boats-for-sale', async (req, res) => {
     console.log('min length',minLength); 
     console.log('max length',maxLength); 
 
-    const styles = [...getStyles(), ...jQueryUIStyle()];
-    const scripts = [...jQueryUIScript(), ...getJquery()];
+    const styles = [...jQueryUIStyle(), ...getStyles()];
+    const scripts = [...getJquery(), ...jQueryUIScript()];
 
 
     res.render('boats', {

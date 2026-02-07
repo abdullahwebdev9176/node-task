@@ -81,3 +81,59 @@
     width: calc(100% - 15%);
     margin: 0 auto;
 }
+
+/* filter range slider  */
+
+.filter-range {
+    width: 75%;
+}
+
+.ui-slider-horizontal .ui-slider-range {
+    background: #000;
+    height: 10px;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default {
+    outline: 0 !important;
+    border: 1px solid #4d4d4d;
+    border-radius: 0;
+    width: 15px;
+    height: 15px;
+    top: 50%;
+    transform: translateY(-45%);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default {
+    outline: 0 !important;
+    border: 1px solid #4d4d4d;
+    border-radius: 0;
+    width: 15px;
+    height: 15px;
+    top: 50%;
+    transform: translateY(-45%);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.filter-range input {
+    width: 100%;
+    text-align: center;
+    color: #222;
+    text-align: center;
+    font-family: 'acumin-light' !important;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400 !important;
+    line-height: normal;
+    letter-spacing: -0.32px;
+}
+.range-slide-prices{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}

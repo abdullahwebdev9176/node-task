@@ -33,10 +33,10 @@
 
                         <div class="filter-content-wrapper">
                             {{#each brands}}
-                                <label>
-                                    <input type="checkbox" class="brand-item" value="{{this}}"
-                                        onclick="handleBrandClick(event)"> {{this}}
-                                </label>
+                            <label>
+                                <input type="checkbox" class="brand-item" value="{{this}}"
+                                    onclick="handleBrandClick(event)"> {{this}}
+                            </label>
                             {{/each}}
 
                         </div>
@@ -49,10 +49,10 @@
 
                         <div class="filter-content-wrapper">
                             {{#each models}}
-                                <label>
-                                    <input type="checkbox" class="model-item" value="{{this}}"
-                                        onclick="handleModelClick(event)"> {{this}}
-                                </label>
+                            <label>
+                                <input type="checkbox" class="model-item" value="{{this}}"
+                                    onclick="handleModelClick(event)"> {{this}}
+                            </label>
                             {{/each}}
 
                         </div>
@@ -64,16 +64,13 @@
                         </div>
 
                         <div class="filter-content-wrapper">
-                               <div class="filter-range">
-    <span id="minVal">{{minLength}}</span>
-    <input type="range">
-
-    <div id="rangeSlider"></div>
-
-    <span id="maxVal">{{maxLength}}</span>
-</div>
-
-
+                            <div class="filter-range">
+                                <div class="range-slide-prices">
+                                    <span id="minVal" data-minlength="{{minLength}}">{{minLength}}</span>
+                                    <span id="maxVal" data-maxlength="{{maxLength}}">{{maxLength}}</span>
+                                </div>
+                                <div id="rangeSlider"></div>
+                            </div>
 
                         </div>
                     </div>
@@ -84,7 +81,7 @@
                 <div class="row" id="boat-listings">
                     {{#each boats}}
 
-                        {{> boat-card}}
+                    {{> boat-card}}
 
                     {{/each}}
                 </div>
