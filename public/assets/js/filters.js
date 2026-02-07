@@ -3,6 +3,26 @@ let selectedBrands = [];
 let selectedModels = [];
 let selectedLengthRange = { min: 0, max: 100 };
 
+function resetFilters() {
+    let conditionItems = document.querySelectorAll('.condition-item');
+    let brandItems = document.querySelectorAll('.brand-item');
+    let modelItems = document.querySelectorAll('.model-item');
+
+    conditionItems.forEach(item => item.checked = false);
+    brandItems.forEach(item => item.checked = false);
+    modelItems.forEach(item => item.checked = false);
+
+    let minLength = $("#minVal").data("minlength") || 0;
+    let maxLength = $("#maxVal").data("maxlength") || 100;
+
+     checkedItemsValues = [];
+     selectedBrands = [];
+     selectedModels = [];
+     selectedLengthRange = { min: minLength, max: maxLength };
+
+    fetchedBoats()
+}
+
 function handleConditionClick(e) {
 
     const clicked = e.target.value;
@@ -27,7 +47,7 @@ function handleConditionClick(e) {
         return i.value;
     })
 
-    fetchedBoats()
+        
 }
 
 function handleBrandClick(e) {
