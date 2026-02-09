@@ -52,8 +52,6 @@ function handleConditionClick(e) {
     checkedItemsValues = checkedItems.map((i) => {
         return i.value;
     })
-
-        
 }
 
 function handleBrandClick(e) {
@@ -110,6 +108,7 @@ async function fetchedBoats() {
             let boatLength = data.boats.length;
             $('#boat-count').text(`${boatLength} boats found`);
             renderBoats(data.boats);
+            updatedFilters(data.boats);
 
             if (data.boats.length === 0) {
                 $('#boat-listings').html('<p class="text-center">No boats found.</p>');
@@ -180,3 +179,71 @@ function renderBoats(boats) {
 
     boatContainer.html(boatCards);
 }
+
+function updatedFilters(boats) {
+
+    const brands = [...new Set(boats.map(boat => boat.make.trim()))];
+    const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
+    const models = [...new Set(boats.map(boat => boat.model.trim()))];
+    // const length = [...new Set(boats.map(boat => boat.length.trim()))];
+
+    // const minLength = Math.min(...length);
+    // const maxLength = Math.max(...length);
+
+    // $("#minVal").text(minLength);
+    // $("#maxVal").text(maxLength);
+    // selectedLengthRange = { min: minLength, max: maxLength };
+
+    console.log('updated brands', models);
+
+    brandFilter(brands);
+    modelFilter(models);
+    // lengthFilter(minLength, maxLength);
+
+}
+
+function brandFilter(availableBrands) {
+
+    console.log('available brands', availableBrands);
+
+    const brandContainer = document.querySelector('#brand-list');
+
+    const availableBrandsHTML = availableBrands.map((brand)=>{
+
+        return `
+            <label>
+                <input type="checkbox" class="brand-item" value="${brand}"
+                    onclick="handleBrandClick(event)"> ${brand}
+            </label>
+        `
+    })
+
+    brandContainer.innerHTML = availableBrandsHTML.join('');
+}
+
+function modelFilter(availableModels) {
+
+    const modelContainer = document.querySelector('#model-list');
+
+    const availableModelsHTML = availableModels.map((model)=>{
+        return `
+            <label>
+                <input type="checkbox" class="model-item" value="${model}"
+                    onclick="handleModelClick(event)"> ${model}
+            </label>
+        `
+    })
+
+    modelContainer.innerHTML = availableModelsHTML.join('');
+}
+
+// function lengthFilter(minLength, maxLength) {
+
+//     if ($("#rangeSlider").length) {
+//         $("#rangeSlider").slider("option", "min", minLength);
+//         $("#rangeSlider").slider("option", "max", maxLength);
+//         $("#rangeSlider").slider("values", [minLength, maxLength]);
+//         $("#minVal").text(minLength);
+//         $("#maxVal").text(maxLength);
+//     }
+// }
