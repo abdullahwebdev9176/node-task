@@ -185,20 +185,23 @@ function updatedFilters(boats) {
     const brands = [...new Set(boats.map(boat => boat.make.trim()))];
     const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
     const models = [...new Set(boats.map(boat => boat.model.trim()))];
-    // const length = [...new Set(boats.map(boat => boat.length.trim()))];
+    const length = [...new Set(boats.map(boat => boat.length.trim()))];
 
-    // const minLength = Math.min(...length);
-    // const maxLength = Math.max(...length);
+    const minLength = Math.min(...length);
+    const maxLength = Math.max(...length);
 
-    // $("#minVal").text(minLength);
-    // $("#maxVal").text(maxLength);
-    // selectedLengthRange = { min: minLength, max: maxLength };
+    console.log('min length', minLength);
+    console.log('max length', maxLength);
 
-    console.log('updated brands', models);
+    $("#minVal").text(minLength);
+    $("#maxVal").text(maxLength);
+    selectedLengthRange = { min: minLength, max: maxLength };
+
+    // console.log('updated brands', models);
 
     brandFilter(brands);
     modelFilter(models);
-    // lengthFilter(minLength, maxLength);
+    lengthFilter(minLength, maxLength);
 
 }
 
@@ -237,13 +240,13 @@ function modelFilter(availableModels) {
     modelContainer.innerHTML = availableModelsHTML.join('');
 }
 
-// function lengthFilter(minLength, maxLength) {
+function lengthFilter(minLength, maxLength) {
 
-//     if ($("#rangeSlider").length) {
-//         $("#rangeSlider").slider("option", "min", minLength);
-//         $("#rangeSlider").slider("option", "max", maxLength);
-//         $("#rangeSlider").slider("values", [minLength, maxLength]);
-//         $("#minVal").text(minLength);
-//         $("#maxVal").text(maxLength);
-//     }
-// }
+    if ($("#rangeSlider").length) {
+        $("#rangeSlider").slider("option", "min", minLength);
+        $("#rangeSlider").slider("option", "max", maxLength);
+        $("#rangeSlider").slider("values", [minLength, maxLength]);
+        $("#minVal").text(minLength);
+        $("#maxVal").text(maxLength);
+    }
+}
