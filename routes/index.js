@@ -66,7 +66,7 @@ router.get('/boats-for-sale', async (req, res) => {
 
     const db = getDB();
 
-    const boats = await db.collection('boats').find().toArray();
+    const boats = await db.collection('boats').find().limit(3).toArray();
 
     const brands = [...new Set(boats.map(boat => boat.make.trim()))];
     const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
