@@ -50,6 +50,18 @@ router.post('/get-boats', async (req, res) => {
 
 })
 
+router.get('/load-more-boats', async (req, res) => {
+    const db = getDB();
+
+    const skip = parseInt(req.query.skip) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const boats = await db.collection('boats').find({}).skip(skip).limit(limit).toArray();
+    res.json({
+        boats: boats
+    });
+})
+
 router.get('/boats-for-sale', async (req, res) => {
 
     const db = getDB();
