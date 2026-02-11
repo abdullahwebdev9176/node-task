@@ -15,10 +15,10 @@ function resetFilters() {
     let minLength = $("#minVal").data("minlength") || 0;
     let maxLength = $("#maxVal").data("maxlength") || 100;
 
-     checkedItemsValues = [];
-     selectedBrands = [];
-     selectedModels = [];
-     selectedLengthRange = { min: minLength, max: maxLength };
+    checkedItemsValues = [];
+    selectedBrands = [];
+    selectedModels = [];
+    selectedLengthRange = { min: minLength, max: maxLength };
 
     if ($("#rangeSlider").length) {
         $("#rangeSlider").slider("values", [minLength, maxLength]);
@@ -122,10 +122,10 @@ async function fetchedBoats() {
     }
 }
 
-    let skipBoats = 3; // Start at 3 since first 3 boats are already loaded by backend
-    const limitBoats = 3;
+let skipBoats = 3; // Start at 3 since first 3 boats are already loaded by backend
+const limitBoats = 3;
 
-async function loadMoreBoats() { 
+async function loadMoreBoats() {
 
     try {
 
@@ -152,32 +152,29 @@ async function loadMoreBoats() {
 
 $(document).ready(function () {
 
-    $(function () {
+    let minLength = $("#minVal").data("minlength") || 0;
+    let maxLength = $("#maxVal").data("maxlength") || 100;
 
-        let minLength = $("#minVal").data("minlength") || 0;
-        let maxLength = $("#maxVal").data("maxlength") || 100;
+    selectedLengthRange = { min: minLength, max: maxLength };
 
-        selectedLengthRange = { min: minLength, max: maxLength };
+    $("#rangeSlider").slider({
+        range: true,
+        min: minLength,
+        max: maxLength,
+        values: [minLength, maxLength],
+        step: 1,
 
-        $("#rangeSlider").slider({
-            range: true,
-            min: minLength,
-            max: maxLength,
-            values: [minLength, maxLength],
-            step: 1,
+        slide: function (event, ui) {
+            $("#minVal").text(ui.values[0]);
+            $("#maxVal").text(ui.values[1]);
 
-            slide: function (event, ui) {
-                $("#minVal").text(ui.values[0]);
-                $("#maxVal").text(ui.values[1]);
-                
-                selectedLengthRange = {
-                    min: ui.values[0],
-                    max: ui.values[1]
-                };
-                
-                fetchedBoats();
-            }
-        });
+            selectedLengthRange = {
+                min: ui.values[0],
+                max: ui.values[1]
+            };
+
+            fetchedBoats();
+        }
     });
 
 })
@@ -255,7 +252,7 @@ function brandFilter(availableBrands) {
 
     const brandContainer = document.querySelector('#brand-list');
 
-    const availableBrandsHTML = availableBrands.map((brand)=>{
+    const availableBrandsHTML = availableBrands.map((brand) => {
 
         return `
             <label>
@@ -272,7 +269,7 @@ function modelFilter(availableModels) {
 
     const modelContainer = document.querySelector('#model-list');
 
-    const availableModelsHTML = availableModels.map((model)=>{
+    const availableModelsHTML = availableModels.map((model) => {
         return `
             <label>
                 <input type="checkbox" class="model-item" value="${model}"
