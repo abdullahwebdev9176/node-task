@@ -122,7 +122,7 @@ async function fetchedBoats() {
     }
 }
 
-    let skipBoats = 0;
+    let skipBoats = 3; // Start at 3 since first 3 boats are already loaded by backend
     const limitBoats = 3;
 
 async function loadMoreBoats() { 
