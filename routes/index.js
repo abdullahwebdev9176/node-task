@@ -54,7 +54,7 @@ router.get('/load-more-boats', async (req, res) => {
     const db = getDB();
 
     const skip = parseInt(req.query.skip) || 0;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 3;
 
     const boats = await db.collection('boats').find({}).skip(skip).limit(limit).toArray();
     res.json({
@@ -66,7 +66,7 @@ router.get('/boats-pagination', async (req, res) => {
     const db = getDB();
 
     const page = parseInt(req.query.page || 1);
-    const limit = 10;
+    const limit = 3;
     const skip = (page - 1) * limit;
 
     console.log('skip boats', skip);
