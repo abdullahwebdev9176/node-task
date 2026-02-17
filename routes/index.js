@@ -34,12 +34,12 @@ router.post('/get-boats', async (req, res) => {
         query.model = { $in: models };
     }
     if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
-        query.length = { 
-            $gte: lengthRange.min.toString(), 
-            $lte: lengthRange.max.toString() 
+        query.length = {
+            $gte: lengthRange.min.toString(),
+            $lte: lengthRange.max.toString()
         };
     }
-    
+
     const boats = await db.collection('boats').find(query).toArray();
 
     console.log(boats);
@@ -62,6 +62,32 @@ router.get('/load-more-boats', async (req, res) => {
     });
 })
 
+router.get('/boats-pagination', async (req, res) => {
+    const db = getDB();
+
+    const page = parseInt(req.query.page || 1);
+    const limit = 10;
+    const skip = (page - 1) * limit;
+
+    console.log('skip boats', skip);
+
+    const boats = await db.collection('boats').find({}).skip(skip).limit(limit).toArray();
+    const totalsBoats = await db.collection('boats').find().count();
+    console.log('total boats', totalsBoats);
+
+    const totalPages = Math.ceil(totalsBoats / limit);
+
+    console.log('total pages', totalPages);
+
+    res.json({
+        boats: boats,
+        totalsBoats: totalsBoats,
+        page: page,
+        skip: skip,
+        totalPages: totalPages
+    });
+})
+
 router.get('/boats-for-sale', async (req, res) => {
 
     const db = getDB();
@@ -76,8 +102,8 @@ router.get('/boats-for-sale', async (req, res) => {
     const minLength = Math.min(...length)
     const maxLength = Math.max(...length)
 
-    console.log('min length',minLength); 
-    console.log('max length',maxLength); 
+    console.log('min length', minLength);
+    console.log('max length', maxLength);
 
     const styles = [...jQueryUIStyle(), ...getStyles()];
     const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
@@ -85,6 +111,40 @@ router.get('/boats-for-sale', async (req, res) => {
 
     res.render('boats', {
         title: 'Boats For Sale',
+        boats: boats,
+        brands: brands,
+        condition: condition,
+        models: models,
+        minLength,
+        maxLength,
+        style: styles,
+        scripts: scripts
+    });
+})
+
+router.get('/new-boats-for-sale', async (req, res) => {
+
+    const db = getDB();
+
+    const boats = await db.collection('boats').find().limit(3).toArray();
+
+    const brands = [...new Set(boats.map(boat => boat.make.trim()))];
+    const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
+    const models = [...new Set(boats.map(boat => boat.model.trim()))];
+    const length = [...new Set(boats.map(boat => boat.length.trim()))];
+
+    const minLength = Math.min(...length)
+    const maxLength = Math.max(...length)
+
+    console.log('min length', minLength);
+    console.log('max length', maxLength);
+
+    const styles = [...jQueryUIStyle(), ...getStyles()];
+    const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
+
+
+    res.render('new-boats', {
+        title: 'New Boats For Sale',
         boats: boats,
         brands: brands,
         condition: condition,

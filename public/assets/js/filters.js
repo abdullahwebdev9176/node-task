@@ -150,6 +150,40 @@ async function loadMoreBoats() {
     }
 }
 
+let currentPage = 1;
+
+async function boatsPagination() {
+    const response = await fetch(`/boats-pagination?page=${currentPage}`);
+    if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+
+        renderBoats(data.boats);
+        renderPagination(data);
+    }
+}
+
+boatsPagination();
+
+function renderPagination(data) {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+    for (let i = 1; i <= data.totalPages; i++) {
+        pagination.innerHTML += `
+        <li class="page-item page-btn ${i === currentPage ? 'active' : ''}"><a class="page-link" href="javascript:void(0)" data-page="${i}">${i}</a></li>`;
+    }
+}
+
+document.getElementById('pagination').addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const page = e.target.dataset.page;
+    if (!page) return;
+
+    currentPage = parseInt(page);
+    boatsPagination();
+})
+
 $(document).ready(function () {
 
     let minLength = $("#minVal").data("minlength") || 0;
