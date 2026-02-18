@@ -165,17 +165,29 @@ async function loadMoreBoats() {
 let currentPage = 1;
 
 async function boatsPagination() {
-    const response = await fetch(`/boats-pagination?page=${currentPage}`);
+
+    const payload = {
+        condition: checkedItemsValues,
+        brands: selectedBrands,
+        models: selectedModels,
+        lengthRange: selectedLengthRange,
+        page: currentPage
+    }
+    const response = await fetch(`/boats-pagination`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
     if (response.ok) {
         const data = await response.json();
         console.log(data);
 
         renderBoats(data.boats);
-        renderPagination(data);
+        renderPagination(data.boats);
     }
 }
-
-boatsPagination();
 
 function renderPagination(data) {
     const pagination = document.getElementById('pagination');

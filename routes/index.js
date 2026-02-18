@@ -88,19 +88,38 @@ router.post('/load-more-boats', async (req, res) => {
     });
 })
 
-router.get('/boats-pagination', async (req, res) => {
+router.post('/boats-pagination', async (req, res) => {
     const db = getDB();
 
-    const page = parseInt(req.query.page || 1);
+    const { condition, brands, models, lengthRange, page } = req.body;
+
+    const currentPage = parseInt(page || 1);
     const limit = settings.boat_limit || 3;
-    const skip = (page - 1) * limit;
+    const skip = (currentPage - 1) * limit;
 
-    console.log('skip boats', skip);
+    let query = {};
 
-    const boats = await db.collection('boats').find({}).skip(skip).limit(limit).toArray();
-    const filteredBoats = await db.collection('boats').find({}).toArray();
-    const totalsBoats = await db.collection('boats').find().count();
-    console.log('total boats', totalsBoats);
+    if (condition.length > 0) {
+        query.condition = { $in: condition };
+    }
+    if (brands.length > 0) {
+        query.make = { $in: brands };
+    }
+    if (models.length > 0) {
+        query.model = { $in: models };
+    }
+    
+    if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
+        query.length = {
+            $gte: lengthRange.min,
+            $lte: lengthRange.max
+        };
+    }
+
+    console.log('skip boats', query);
+
+    const boats = await db.collection('boats').find(query).skip(skip).limit(limit).toArray();
+    const totalsBoats = await db.collection('boats').find(query).count();
 
     const totalPages = Math.ceil(totalsBoats / limit);
 
@@ -109,8 +128,7 @@ router.get('/boats-pagination', async (req, res) => {
     res.json({
         boats: boats,
         totalsBoats: totalsBoats,
-        filteredBoats: filteredBoats,
-        page: page,
+        page: currentPage,
         skip: skip,
         totalPages: totalPages
     });
