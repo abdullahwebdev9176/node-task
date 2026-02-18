@@ -307,7 +307,7 @@ function updatedFilters(boats) {
 
     // console.log('updated brands', models);
 
-    brandFilter(brands);
+    // brandFilter(brands);
     modelFilter(models);
     lengthFilter(minLength, maxLength);
 
