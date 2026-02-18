@@ -129,12 +129,23 @@ async function loadMoreBoats() {
 
     try {
 
-        const response = await fetch(`/load-more-boats?skip=${skipBoats}&limit=${limitBoats}`, {
-            method: 'GET',
+        const payload = {
+            condition: checkedItemsValues,
+            brands: selectedBrands,
+            models: selectedModels,
+            lengthRange: selectedLengthRange,
+            skip:skipBoats,
+            limit:limitBoats
+        }
+
+        const response = await fetch(`/load-more-boats`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(payload)
         });
+        
         if (response.ok) {
             const data = await response.json();
             console.log('boats length', data.boats.length);

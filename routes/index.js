@@ -54,13 +54,35 @@ router.post('/get-boats', async (req, res) => {
 
 })
 
-router.get('/load-more-boats', async (req, res) => {
+router.post('/load-more-boats', async (req, res) => {
     const db = getDB();
 
-    const skip = parseInt(req.query.skip) || 0;
-    const limit = parseInt(req.query.limit) || 3;
+    console.log('query params', req.body);
 
-    const boats = await db.collection('boats').find({}).skip(skip).limit(limit).toArray();
+    const { condition, brands, models, lengthRange, skip, limit } = req.body;
+
+    const skipBoat = parseInt(skip) || 0;
+    const limitBoat = parseInt(limit) || 3;
+
+    let query = {};
+
+    if (condition.length > 0) {
+        query.condition = { $in: condition };
+    }
+    if (brands.length > 0) {
+        query.make = { $in: brands };
+    }
+    if (models.length > 0) {
+        query.model = { $in: models };
+    }
+    if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
+        query.length = {
+            $gte: lengthRange.min.toString(),
+            $lte: lengthRange.max.toString()
+        };
+    }
+
+    const boats = await db.collection('boats').find(query).skip(skipBoat).limit(limitBoat).toArray();
     res.json({
         boats: boats
     });
@@ -107,8 +129,8 @@ router.get('/boats-for-sale', async (req, res) => {
     const minLength = Math.min(...length)
     const maxLength = Math.max(...length)
 
-    console.log('min length', minLength);
-    console.log('max length', maxLength);
+    // console.log('min length', minLength);
+    // console.log('max length', maxLength);
 
     const styles = [...jQueryUIStyle(), ...getStyles()];
     const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
