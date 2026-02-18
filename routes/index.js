@@ -190,6 +190,19 @@ router.get('/new-boats-for-sale', async (req, res) => {
     const styles = [...jQueryUIStyle(), ...getStyles()];
     const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
 
+    const totalpages = Math.ceil(boats.length / settings.boat_limit);
+    const currentPage = 1;
+
+    const pages = [];
+
+    for (let i = 1; i <= totalpages; i++) {
+        pages.push({
+            page: i,
+            isActive: i === currentPage
+        });
+    }
+    console.log('total pages', totalpages);
+
 
     res.render('new-boats', {
         title: 'New Boats For Sale',
@@ -199,6 +212,7 @@ router.get('/new-boats-for-sale', async (req, res) => {
         models: models,
         minLength,
         maxLength,
+        pages,
         style: styles,
         scripts: scripts
     });

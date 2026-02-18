@@ -194,6 +194,7 @@ function renderPagination(data) {
 
     if (pagination) {
         pagination.innerHTML = '';
+        let currentPage = data.page;
         for (let i = 1; i <= data.totalPages; i++) {
             pagination.innerHTML += `
         <li class="page-item page-btn ${i === currentPage ? 'active' : ''}"><a class="page-link" href="javascript:void(0)" data-page="${i}">${i}</a></li>`;
