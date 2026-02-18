@@ -42,11 +42,14 @@ router.post('/get-boats', async (req, res) => {
     }
 
     const boats = await db.collection('boats').find(query).limit(settings.boat_limit).toArray();
+    const filterData = await db.collection('boats').find(query).toArray();
 
-    console.log(boats);
+    console.log('boats', boats.length);
+    console.log('filterData', filterData.length);
 
     res.json({
-        boats: boats
+        boats: boats,
+        filterData: filterData
     });
 
 })

@@ -108,7 +108,7 @@ async function fetchedBoats() {
             let boatLength = data.boats.length;
             $('#boat-count').text(`${boatLength} boats found`);
             renderBoats(data.boats);
-            updatedFilters(data.boats);
+            updatedFilters(data.filterData);
 
             if (data.boats.length === 0) {
                 $('#boat-listings').html('<p class="text-center">No boats found.</p>');
