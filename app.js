@@ -7,6 +7,7 @@ const handlebars = require('express-handlebars')
 const indexRouter = require('./routes/index');
 const { router: feedPath } = require('./routes/boats-feed')
 const cronFeed = require('./cron/cron-feed');
+const settings = require('./config/setting.json');
 
 
 connectDB();

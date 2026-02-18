@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/db');
 const { ObjectId } = require('mongodb');
+const settings = require('../config/setting.json');
 const { getStyles, getJquery, jQueryUIScript, jQueryUIStyle, getFilter } = require('../helpers/assetHelper');
 
 router.get('/', (req, res) => {
@@ -40,7 +41,7 @@ router.post('/get-boats', async (req, res) => {
         };
     }
 
-    const boats = await db.collection('boats').find(query).toArray();
+    const boats = await db.collection('boats').find(query).limit(settings.boat_limit).toArray();
 
     console.log(boats);
 
@@ -66,7 +67,7 @@ router.get('/boats-pagination', async (req, res) => {
     const db = getDB();
 
     const page = parseInt(req.query.page || 1);
-    const limit = 3;
+    const limit = settings.boat_limit || 3;
     const skip = (page - 1) * limit;
 
     console.log('skip boats', skip);
@@ -92,7 +93,7 @@ router.get('/boats-for-sale', async (req, res) => {
 
     const db = getDB();
 
-    const results = await db.collection('boats').find().limit(3).toArray();
+    const results = await db.collection('boats').find().limit(settings.boat_limit).toArray();
     const boats = await db.collection('boats').find().toArray();
 
     const brands = [...new Set(boats.map(boat => boat.make.trim()))];

@@ -137,7 +137,7 @@ async function loadMoreBoats() {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log(data.boats.length);
+            console.log('boats length', data.boats.length);
             renderLoadMoreBoats(data.boats);
             skipBoats = skipBoats + limitBoats;
 
