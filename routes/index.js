@@ -98,6 +98,7 @@ router.get('/boats-pagination', async (req, res) => {
     console.log('skip boats', skip);
 
     const boats = await db.collection('boats').find({}).skip(skip).limit(limit).toArray();
+    const filteredBoats = await db.collection('boats').find({}).toArray();
     const totalsBoats = await db.collection('boats').find().count();
     console.log('total boats', totalsBoats);
 
@@ -108,6 +109,7 @@ router.get('/boats-pagination', async (req, res) => {
     res.json({
         boats: boats,
         totalsBoats: totalsBoats,
+        filteredBoats: filteredBoats,
         page: page,
         skip: skip,
         totalPages: totalPages
@@ -153,7 +155,8 @@ router.get('/new-boats-for-sale', async (req, res) => {
 
     const db = getDB();
 
-    const boats = await db.collection('boats').find().limit(3).toArray();
+    const results = await db.collection('boats').find().limit(3).toArray();
+    const boats = await db.collection('boats').find().toArray();
 
     const brands = [...new Set(boats.map(boat => boat.make.trim()))];
     const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
@@ -163,8 +166,8 @@ router.get('/new-boats-for-sale', async (req, res) => {
     const minLength = Math.min(...length)
     const maxLength = Math.max(...length)
 
-    console.log('min length', minLength);
-    console.log('max length', maxLength);
+    // console.log('min length', minLength);
+    // console.log('max length', maxLength);
 
     const styles = [...jQueryUIStyle(), ...getStyles()];
     const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
@@ -172,7 +175,7 @@ router.get('/new-boats-for-sale', async (req, res) => {
 
     res.render('new-boats', {
         title: 'New Boats For Sale',
-        boats: boats,
+        boats: results,
         brands: brands,
         condition: condition,
         models: models,

@@ -145,7 +145,7 @@ async function loadMoreBoats() {
             },
             body: JSON.stringify(payload)
         });
-        
+
         if (response.ok) {
             const data = await response.json();
             console.log('boats length', data.boats.length);
