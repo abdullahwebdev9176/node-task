@@ -92,8 +92,7 @@ router.post('/boats-pagination', async (req, res) => {
     const db = getDB();
 
     const { condition, brands, models, lengthRange, page } = req.body;
-
-    console.log('pagination query params', req.body);
+    // console.log('pagination query params', req.body);
 
     const currentPage = parseInt(page || 1);
     const limit = settings.boat_limit || 3;
@@ -113,20 +112,22 @@ router.post('/boats-pagination', async (req, res) => {
     
     if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
         query.length = {
-            $gte: lengthRange.min,
-            $lte: lengthRange.max
+            $gte: lengthRange.min.toString(),
+            $lte: lengthRange.max.toString()
         };
     }
 
-    console.log('skip boats', query);
+    // console.log('skip boats', query);
 
     const boats = await db.collection('boats').find(query).skip(skip).limit(limit).toArray();
     const totalsBoats = await db.collection('boats').find({}).count();
 
+    console.log('totalsBoats', totalsBoats);
+
     const totalPages = Math.ceil(totalsBoats / limit);
 
-    console.log('result', boats);
-    console.log('total result', totalPages);
+    console.log('result', boats.length);
+    console.log('total pages', totalPages);
 
     res.json({
         boats: boats,
