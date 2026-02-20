@@ -93,6 +93,8 @@ router.post('/boats-pagination', async (req, res) => {
 
     const { condition, brands, models, lengthRange, page } = req.body;
 
+    console.log('pagination query params', req.body);
+
     const currentPage = parseInt(page || 1);
     const limit = settings.boat_limit || 3;
     const skip = (currentPage - 1) * limit;
@@ -119,11 +121,12 @@ router.post('/boats-pagination', async (req, res) => {
     console.log('skip boats', query);
 
     const boats = await db.collection('boats').find(query).skip(skip).limit(limit).toArray();
-    const totalsBoats = await db.collection('boats').find(query).count();
+    const totalsBoats = await db.collection('boats').find({}).count();
 
     const totalPages = Math.ceil(totalsBoats / limit);
 
-    console.log('total pages', totalPages);
+    console.log('result', boats);
+    console.log('total result', totalPages);
 
     res.json({
         boats: boats,
