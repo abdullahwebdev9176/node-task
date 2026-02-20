@@ -52,6 +52,8 @@ function handleConditionClick(e) {
     checkedItemsValues = checkedItems.map((i) => {
         return i.value;
     })
+
+    fetchedBoats()
 }
 
 function handleBrandClick(e) {
