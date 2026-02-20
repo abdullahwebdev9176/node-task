@@ -92,6 +92,7 @@ router.post('/boats-pagination', async (req, res) => {
     const db = getDB();
 
     const { condition, brands, models, lengthRange, page } = req.body;
+    // console.log('pagination query params', req.body);
 
     const currentPage = parseInt(page || 1);
     const limit = settings.boat_limit || 3;
@@ -113,16 +114,20 @@ router.post('/boats-pagination', async (req, res) => {
         query.length = {
             $gte: lengthRange.min.toString(),
             $lte: lengthRange.max.toString(),
+
         };
     }
 
-    console.log('skip boats', query);
+    // console.log('skip boats', query);
 
     const boats = await db.collection('boats').find(query).skip(skip).limit(limit).toArray();
-    const totalsBoats = await db.collection('boats').find(query).count();
+    const totalsBoats = await db.collection('boats').find({}).count();
+
+    console.log('totalsBoats', totalsBoats);
 
     const totalPages = Math.ceil(totalsBoats / limit);
 
+    console.log('result', boats.length);
     console.log('total pages', totalPages);
 
     res.json({
@@ -173,7 +178,7 @@ router.get('/new-boats-for-sale', async (req, res) => {
 
     const db = getDB();
 
-    const results = await db.collection('boats').find().limit(3).toArray();
+    const results = await db.collection('boats').find({condition: 'New Model'}).limit(3).toArray();
     const boats = await db.collection('boats').find().toArray();
 
     const brands = [...new Set(boats.map(boat => boat.make.trim()))];

@@ -52,6 +52,8 @@ function handleConditionClick(e) {
     checkedItemsValues = checkedItems.map((i) => {
         return i.value;
     })
+
+    fetchedBoats()
 }
 
 function handleBrandClick(e) {
@@ -173,6 +175,9 @@ async function boatsPagination() {
         lengthRange: selectedLengthRange,
         page: currentPage
     }
+
+    // console.log('pagination payload', payload);
+
     const response = await fetch(`/boats-pagination`,{
         method: 'POST',
         headers: {
@@ -182,37 +187,44 @@ async function boatsPagination() {
     });
     if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        console.log('boats pagination data', data.boats);
+        console.log('total boats', data.totalsBoats);
+        console.log('totalPages', data.totalPages);
 
         renderBoats(data.boats);
         renderPagination(data);
     }
 }
 
-function renderPagination(data) {
-    const pagination = document.getElementById('pagination');
+const pagination = $('#pagination');
 
-    if (pagination) {
-        pagination.innerHTML = '';
-        let currentPage = data.page;
+function renderPagination(data) {
+
+    console.log('render pagination', data);
+
+    if (pagination.length) {
+        pagination.html('');
+
         for (let i = 1; i <= data.totalPages; i++) {
-            pagination.innerHTML += `
-        <li class="page-item page-btn ${i === currentPage ? 'active' : ''}"><a class="page-link" href="javascript:void(0)" data-page="${i}">${i}</a></li>`;
+            pagination.append(`
+        <li class="page-item page-btn ${i === currentPage ? 'active' : ''}"><a class="page-link" href="javascript:void(0)" data-page="${i}">${i}</a></li>`);
         }
     }
 
 }
 
-const pagination = document.getElementById('pagination');
+if (pagination.length) {
+    pagination.on('click', '.page-link', (e) => {
 
-if (pagination) {
-    pagination.addEventListener('click', (e) => {
+        console.log('pagination clicked');
         e.preventDefault();
 
-        const page = e.target.dataset.page;
+        const page = $(e.target).data('page');
         if (!page) return;
 
         currentPage = parseInt(page);
+
+        console.log('current page', currentPage);
         boatsPagination();
     })
 }
