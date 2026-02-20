@@ -185,7 +185,7 @@ async function boatsPagination() {
         console.log(data);
 
         renderBoats(data.boats);
-        renderPagination(data.boats);
+        renderPagination(data);
     }
 }
 

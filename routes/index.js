@@ -111,8 +111,8 @@ router.post('/boats-pagination', async (req, res) => {
     
     if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
         query.length = {
-            $gte: lengthRange.min,
-            $lte: lengthRange.max
+            $gte: lengthRange.min.toString(),
+            $lte: lengthRange.max.toString(),
         };
     }
 
