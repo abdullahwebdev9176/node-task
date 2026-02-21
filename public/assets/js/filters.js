@@ -124,8 +124,8 @@ async function fetchedBoats() {
     }
 }
 
-let skipBoats = 3;
-const limitBoats = 3;
+let skipBoats = 12;
+const limitBoats = 12;
 
 async function loadMoreBoats() {
 
