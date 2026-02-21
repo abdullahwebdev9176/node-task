@@ -4,6 +4,8 @@ const { getDB } = require('../config/db');
 const { ObjectId } = require('mongodb');
 const settings = require('../config/setting.json');
 const { getStyles, getJquery, jQueryUIScript, jQueryUIStyle, getFilter } = require('../helpers/assetHelper');
+const { inventory_urls } = require('../helpers/utils');
+
 
 router.get('/', (req, res) => {
 
@@ -15,6 +17,50 @@ router.get('/', (req, res) => {
         name: name,
         style: styles
     });
+})
+
+router.get('/:page', async(req, res) => {
+
+    const page = req.params.page;
+
+    const allowedPages = inventory_urls;
+    
+    if (!allowedPages.includes(page)) {
+        return renderNotFoundPage(req, res);
+    }
+
+    const db = getDB();
+
+    const results = await db.collection('boats').find().limit(settings.boat_limit).toArray();
+    const boats = await db.collection('boats').find().toArray();
+
+    const brands = [...new Set(boats.map(boat => boat.make.trim()))];
+    const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
+    const models = [...new Set(boats.map(boat => boat.model.trim()))];
+    const length = [...new Set(boats.map(boat => boat.length.trim()))];
+
+    const minLength = Math.min(...length)
+    const maxLength = Math.max(...length)
+
+    // console.log('min length', minLength);
+    // console.log('max length', maxLength);
+
+    const styles = [...jQueryUIStyle(), ...getStyles()];
+    const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
+
+
+    res.render('boats', {
+        title: 'Boats For Sale',
+        boats: results,
+        brands: brands,
+        condition: condition,
+        models: models,
+        minLength,
+        maxLength,
+        style: styles,
+        scripts: scripts
+    });
+
 })
 
 router.post('/get-boats', async (req, res) => {
@@ -139,41 +185,6 @@ router.post('/boats-pagination', async (req, res) => {
     });
 })
 
-router.get('/boats-for-sale', async (req, res) => {
-
-    const db = getDB();
-
-    const results = await db.collection('boats').find().limit(settings.boat_limit).toArray();
-    const boats = await db.collection('boats').find().toArray();
-
-    const brands = [...new Set(boats.map(boat => boat.make.trim()))];
-    const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
-    const models = [...new Set(boats.map(boat => boat.model.trim()))];
-    const length = [...new Set(boats.map(boat => boat.length.trim()))];
-
-    const minLength = Math.min(...length)
-    const maxLength = Math.max(...length)
-
-    // console.log('min length', minLength);
-    // console.log('max length', maxLength);
-
-    const styles = [...jQueryUIStyle(), ...getStyles()];
-    const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
-
-
-    res.render('boats', {
-        title: 'Boats For Sale',
-        boats: results,
-        brands: brands,
-        condition: condition,
-        models: models,
-        minLength,
-        maxLength,
-        style: styles,
-        scripts: scripts
-    });
-})
-
 router.get('/new-boats-for-sale', async (req, res) => {
 
     const db = getDB();
@@ -241,7 +252,10 @@ router.get('/boat-details/:id', async (req, res) => {
     });
 });
 
-
-
+const renderNotFoundPage = (req, res) => {
+    res.render('error-page', {
+        title: 'Page Not Found'
+    });
+}
 
 module.exports = router;
