@@ -3,6 +3,11 @@ let selectedBrands = [];
 let selectedModels = [];
 let selectedLengthRange = { min: 0, max: 100 };
 
+let wantUpdateFilter = false;
+function setFilterUpdate() {
+    wantUpdateFilter = true;
+}
+
 function resetFilters() {
     let conditionItems = document.querySelectorAll('.condition-item');
     let brandItems = document.querySelectorAll('.brand-item');
@@ -19,6 +24,8 @@ function resetFilters() {
     selectedBrands = [];
     selectedModels = [];
     selectedLengthRange = { min: minLength, max: maxLength };
+
+    setFilterUpdate();
 
     if ($("#rangeSlider").length) {
         $("#rangeSlider").slider("values", [minLength, maxLength]);
@@ -53,6 +60,7 @@ function handleConditionClick(e) {
         return i.value;
     })
 
+    setFilterUpdate();
     fetchedBoats()
 }
 
@@ -66,6 +74,7 @@ function handleBrandClick(e) {
         .filter(item => item.checked)
         .map(item => item.value);
 
+    setFilterUpdate();
     fetchedBoats()
     console.log(selectedBrands)
 
@@ -82,6 +91,7 @@ function handleModelClick(e) {
         return item.value;
     })
 
+    setFilterUpdate();
     fetchedBoats();
 
 }
@@ -110,7 +120,11 @@ async function fetchedBoats() {
             let boatLength = data.boats.length;
             $('#boat-count').text(`${boatLength} boats found`);
             renderBoats(data.boats);
-            updatedFilters(data.filterData);
+            
+            if (wantUpdateFilter) {
+                updatedFilters(data.filterData);
+                wantUpdateFilter = false;
+            }
 
             if (data.boats.length === 0) {
                 $('#boat-listings').html('<p class="text-center">No boats found.</p>');
@@ -252,6 +266,7 @@ $(document).ready(function () {
                 max: ui.values[1]
             };
 
+            setFilterUpdate();
             fetchedBoats();
         }
     });
