@@ -1,3 +1,4 @@
+const settings = require('../config/setting.json');
 
 const inventory_urls = ['boats-for-sale', 'new-boats-for-sale', 'used-boats-for-sale'];
 
@@ -21,6 +22,7 @@ const filter_queries_data = (filterParams) => {
             $lte: lengthRange.max.toString()
         };
     }
+
     return query;
 };
 

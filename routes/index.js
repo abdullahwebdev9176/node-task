@@ -69,7 +69,6 @@ router.post('/get-boats', async (req, res) => {
     console.log(req.body);
 
     const query = filter_queries_data(req.body);
-    
 
     const boats = await db.collection('boats').find(query).limit(settings.boat_limit).toArray();
     const filterData = await db.collection('boats').find(query).toArray();
@@ -89,7 +88,7 @@ router.post('/load-more-boats', async (req, res) => {
 
     console.log('query params', req.body);
 
-    const { condition, brands, models, lengthRange, skip, limit } = req.body;
+    const { skip, limit } = req.body;
 
     const skipBoat = parseInt(skip) || 0;
     const limitBoat = parseInt(limit) || settings.boat_limit;
