@@ -327,7 +327,13 @@ function renderBoats(boats) {
                     </div>
                     <div class="boat-card-body">
                         <h3 class="boat-card-title"><a href="/boat-details/${boat._id}">${boat.title}</a></h3>
-                        ${boat.price ? `<p class="boat-card-price">Price: ${boat.price}</p>` : 'Call For Price'}
+
+                        <ul class="card-specs">
+                            ${boat.condition ? `<li class="specs-item">${boat.condition}</li>` : ''}
+                            ${boat.length ? `<li class="specs-item">${boat.length}' ft</li>` : ''}
+                        </ul>
+
+                        ${boat.price ? `<p class="boat-card-price">Price: ${boat.price}</p>` : '<p class="boat-card-price">Call For Price</p>'}
                     </div>
                 </div>
                 `;
@@ -348,6 +354,12 @@ function renderLoadMoreBoats(boats) {
                     </div>
                     <div class="boat-card-body">
                         <h3 class="boat-card-title"><a href="/boat-details/${boat._id}">${boat.title}</a></h3>
+
+                        <ul class="card-specs">
+                            ${boat.condition ? `<li class="specs-item">${boat.condition}</li>` : ''}
+                            ${boat.length ? `<li class="specs-item">${boat.length}' ft</li>` : ''}
+                        </ul>
+                        
                         ${boat.price ? `<p class="boat-card-price">Price: ${boat.price}</p>` : 'Call For Price'}
                     </div>
                 </div>
