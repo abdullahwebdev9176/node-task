@@ -219,3 +219,16 @@
     transform: translateY(-50%);
     color: #ccc;
 }
+.selected-filter-wrapper{
+    padding-left: 0;
+}
+.selected-filter-wrapper li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    padding: 5px 10px;
+}
+.close-filter{
+    cursor: pointer;
+}
