@@ -26,7 +26,19 @@ const filter_queries_data = (filterParams) => {
     return query;
 };
 
+const boats_based_on_types = (type) => {
+    switch (type) {
+        case 'new-boats-for-sale':
+            return { condition: 'New Model' };
+        case 'used-boats-for-sale':
+            return { condition: 'Pre-Owned' };
+        default:
+            return {};
+    }
+};
+
 module.exports = {
     inventory_urls,
-    filter_queries_data
+    filter_queries_data,
+    boats_based_on_types
 };

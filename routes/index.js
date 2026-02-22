@@ -4,7 +4,7 @@ const { getDB } = require('../config/db');
 const { ObjectId } = require('mongodb');
 const settings = require('../config/setting.json');
 const { getStyles, getJquery, jQueryUIScript, jQueryUIStyle, getFilter } = require('../helpers/assetHelper');
-const { inventory_urls, filter_queries_data } = require('../helpers/utils');
+const { inventory_urls, filter_queries_data, boats_based_on_types } = require('../helpers/utils');
 
 
 router.get('/', (req, res) => {
@@ -31,8 +31,12 @@ router.get('/:page', async(req, res) => {
 
     const db = getDB();
 
-    const results = await db.collection('boats').find().limit(settings.boat_limit).toArray();
-    const boats = await db.collection('boats').find().toArray();
+    const typeQuery = boats_based_on_types(page);
+
+    // console.log('type query', typeQuery);
+
+    const results = await db.collection('boats').find(typeQuery).limit(settings.boat_limit).toArray();
+    const boats = await db.collection('boats').find(typeQuery).toArray();
 
     const brands = [...new Set(boats.map(boat => boat.make.trim()))];
     const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
