@@ -116,7 +116,8 @@ async function fetchedBoats() {
             console.log('Boats fetched');
             const data = await response.json();
             console.log(data);
-            let boatLength = data.boats.length;
+            let boatLength = data.filterData.length;
+
             $('#boat-count').text(`${boatLength} boats found`);
             renderBoats(data.boats);
             

@@ -42,6 +42,8 @@ router.get('/:page', async(req, res) => {
     const minLength = Math.min(...length)
     const maxLength = Math.max(...length)
 
+    const totalBoats = boats.length;
+
     // console.log('min length', minLength);
     // console.log('max length', maxLength);
 
@@ -52,6 +54,7 @@ router.get('/:page', async(req, res) => {
     res.render('boats', {
         title: 'Boats For Sale',
         boats: results,
+        totalBoats: totalBoats,
         brands: brands,
         condition: condition,
         models: models,
@@ -73,7 +76,7 @@ router.post('/get-boats', async (req, res) => {
     const boats = await db.collection('boats').find(query).limit(settings.boat_limit).toArray();
     const filterData = await db.collection('boats').find(query).toArray();
 
-    console.log('boats', boats.length);
+    // console.log('boats', boats.length);
     console.log('filterData', filterData.length);
 
     res.json({
@@ -101,58 +104,55 @@ router.post('/load-more-boats', async (req, res) => {
     });
 })
 
-router.post('/boats-pagination', async (req, res) => {
-    const db = getDB();
+// router.post('/boats-pagination', async (req, res) => {
+//     const db = getDB();
 
-    const { condition, brands, models, lengthRange, page } = req.body;
-    // console.log('pagination query params', req.body);
+//     const { condition, brands, models, lengthRange, page } = req.body;
 
-    const currentPage = parseInt(page || 1);
-    const limit = settings.boat_limit || 3;
-    const skip = (currentPage - 1) * limit;
+//     const currentPage = parseInt(page || 1);
+//     const limit = settings.boat_limit || 12;
+//     const skip = (currentPage - 1) * limit;
 
-    let query = {};
+//     let query = {};
 
-    if (condition.length > 0) {
-        query.condition = { $in: condition };
-    }
-    if (brands.length > 0) {
-        query.make = { $in: brands };
-    }
-    if (models.length > 0) {
-        query.model = { $in: models };
-    }
+//     if (condition.length > 0) {
+//         query.condition = { $in: condition };
+//     }
+//     if (brands.length > 0) {
+//         query.make = { $in: brands };
+//     }
+//     if (models.length > 0) {
+//         query.model = { $in: models };
+//     }
     
-    if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
-        query.length = {
-            $gte: lengthRange.min.toString(),
-            $lte: lengthRange.max.toString(),
+//     if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
+//         query.length = {
+//             $gte: lengthRange.min.toString(),
+//             $lte: lengthRange.max.toString(),
 
-        };
-    }
+//         };
+//     }
 
-    // console.log('skip boats', query);
+//     // console.log('skip boats', query);
 
-    const boats = await db.collection('boats').find(query).skip(skip).limit(limit).toArray();
-    const totalsBoats = await db.collection('boats').find({}).count();
+//     const boats = await db.collection('boats').find(query).skip(skip).limit(limit).toArray();
+//     const totalsBoats = await db.collection('boats').find({}).count();
 
-    console.log('totalsBoats', totalsBoats);
+//     console.log('totalsBoats', totalsBoats);
 
-    const totalPages = Math.ceil(totalsBoats / limit);
+//     const totalPages = Math.ceil(totalsBoats / limit);
 
-    console.log('result', boats.length);
-    console.log('total pages', totalPages);
+//     console.log('result', boats.length);
+//     console.log('total pages', totalPages);
 
-    res.json({
-        boats: boats,
-        totalsBoats: totalsBoats,
-        page: currentPage,
-        skip: skip,
-        totalPages: totalPages
-    });
-})
-
-
+//     res.json({
+//         boats: boats,
+//         totalsBoats: totalsBoats,
+//         page: currentPage,
+//         skip: skip,
+//         totalPages: totalPages
+//     });
+// })
 
 router.get('/boat-details/:id', async (req, res) => {
     const db = getDB();
