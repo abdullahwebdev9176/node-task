@@ -210,11 +210,14 @@ async function boatsPagination() {
     }
 }
 
+let boat_search_value = '';
+let sort_by_value = '';
+
 $('#boatSearch').on('keyup', function(e) {
 
     if (e.key === 'Enter') {
-        const boat_search_value = $(this).val();
-        boatSearch(boat_search_value.trim());
+        boat_search_value = $(this).val().trim();
+        boatSearch(boat_search_value, sort_by_value);
         console.log('search boat: ', boat_search_value);
         $(this).val('');
     }
@@ -223,9 +226,9 @@ $('#boatSearch').on('keyup', function(e) {
 
 $('#sortBy').on('change', function() {
 
-    const sortByValue = $(this).val();
-    console.log('sort by value', sortByValue);
-    boatSearch(sortByValue);
+    sort_by_value = $(this).val();
+    console.log('sort by value', sort_by_value);
+    boatSearch(boat_search_value, sort_by_value);
 })
 
 async function boatSearch(searchValue, sortByValue) {
