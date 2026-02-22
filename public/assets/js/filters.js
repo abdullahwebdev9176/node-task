@@ -210,6 +210,38 @@ async function boatsPagination() {
     }
 }
 
+$('#boatSearch').on('keyup', function(e) {
+
+    if (e.key === 'Enter') {
+        const boat_search_value = $(this).val();
+        boatSearch(boat_search_value.trim());
+        console.log('search boat: ', boat_search_value);
+        $(this).val('');
+    }
+
+})
+
+async function boatSearch(searchValue) {
+    try{
+
+        const response = await fetch('/boat-search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ searchValue })
+        });
+
+        const data = await response.json();
+        console.log('searched result', data);
+        $('#boat-count').text(`${data.boats.length} boats found`);
+        renderBoats(data.boats);
+
+    }catch(error) {
+        console.error('Error fetching boats:', error);
+    }
+}
+
 const pagination = $('#pagination');
 
 function renderPagination(data) {

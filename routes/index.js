@@ -104,6 +104,24 @@ router.post('/load-more-boats', async (req, res) => {
     });
 })
 
+router.post('/boat-search', async (req, res) => {
+    const db = getDB();
+
+    console.log('query params', req.body);
+
+    const { searchValue } = req.body;
+
+    const boats = await db.collection('boats').find({
+        $or: [
+            { title: { $regex: searchValue, $options: 'i' } }
+        ]
+    }).toArray();
+
+    res.json({
+        boats: boats
+    })
+})
+
 // router.post('/boats-pagination', async (req, res) => {
 //     const db = getDB();
 
