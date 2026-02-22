@@ -198,3 +198,24 @@
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+.card-specs{
+    display: flex;
+    padding-left: 0;
+    margin-bottom: 5px;
+}
+.card-specs .specs-item {
+    list-style: none;
+    padding-right: 20px;
+    position: relative;
+}
+.specs-item + .specs-item::before {
+    content: "";
+    width: 1px;
+    height: 15px;
+    background: #ccc;
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ccc;
+}

@@ -7,10 +7,19 @@
     <div class="boat-card-body">
         <h3 class="boat-card-title"><a href="/boat-details/{{this._id}}">{{this.title}}</a></h3>
 
+        <ul class="card-specs">
+            {{#if this.condition}}
+                <li class="specs-item">{{this.condition}}</li>
+            {{/if}}
+            {{#if this.length}}
+                <li class="specs-item">{{this.length}}' ft</li>
+            {{/if}}
+        </ul>
+
         {{#if this.price}}
         <p class="boat-card-price">Price: {{this.price}}</p>
         {{else}}
-        <p class="boat-card-price">Price: Call For Price</p>
+        <p class="boat-card-price">Call For Price</p>
         {{/if}}
     </div>
 </div>
