@@ -221,7 +221,14 @@ $('#boatSearch').on('keyup', function(e) {
 
 })
 
-async function boatSearch(searchValue) {
+$('#sortBy').on('change', function() {
+
+    const sortByValue = $(this).val();
+    console.log('sort by value', sortByValue);
+    boatSearch(sortByValue);
+})
+
+async function boatSearch(searchValue, sortByValue) {
     try{
 
         const response = await fetch('/boat-search', {
@@ -229,7 +236,7 @@ async function boatSearch(searchValue) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ searchValue })
+            body: JSON.stringify({ searchValue, sortByValue })
         });
 
         const data = await response.json();

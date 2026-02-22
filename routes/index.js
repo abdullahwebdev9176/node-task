@@ -109,13 +109,37 @@ router.post('/boat-search', async (req, res) => {
 
     console.log('query params', req.body);
 
-    const { searchValue } = req.body;
+    const { searchValue, sortByValue } = req.body;
 
-    const boats = await db.collection('boats').find({
-        $or: [
+    let query = {};
+    let sorting = {};
+
+    if(searchValue){
+        query.$or = [
             { title: { $regex: searchValue, $options: 'i' } }
-        ]
-    }).toArray();
+        ];
+    }
+
+    switch (sortByValue) {
+
+        case 'price_low_high':
+            sorting = { price: 1 };
+            break;
+        case 'price_high_low':
+            sorting = { price: -1 };
+            break;
+        case 'length_low_high':
+            sorting = { length: 1 };
+            break;
+        case 'length_high_low':
+            sorting = { length: -1 };
+            break;
+        default:
+            sorting = { createdAt: -1 };
+    }
+
+
+    const boats = await db.collection('boats').find(query).sort(sorting).toArray();
 
     res.json({
         boats: boats
