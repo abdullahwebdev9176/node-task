@@ -47,6 +47,13 @@ function selectedFilters() {
         `;
     });
 
+    filtersHTML += `
+        <li data-type="length" data-value="${selectedLengthRange.min}-${selectedLengthRange.max}">
+            <span>Length: ${selectedLengthRange.min} - ${selectedLengthRange.max}</span>
+            <span class="fa fa-close close-filter"></span>
+        </li>
+    `;
+
     if (filtersHTML) {
         container.html(filtersHTML);
         section.show();
@@ -65,6 +72,13 @@ function removeSelectedFilter(type, value) {
     } else if (type === 'model') {
         selectedModels = selectedModels.filter(item => item !== value);
         $(`.model-item[value="${value}"]`).prop('checked', false);
+    } else if (type === 'length') {
+        selectedLengthRange = { min: 0, max: 100 };
+        if ($("#rangeSlider").length) {
+            $("#rangeSlider").slider("values", [0, 100]);
+            $("#minVal").text(selectedLengthRange.min);
+            $("#maxVal").text(selectedLengthRange.max);
+        }
     }
 
     savedFilter();
