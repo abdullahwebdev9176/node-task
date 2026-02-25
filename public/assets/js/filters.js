@@ -15,6 +15,72 @@ function savedFilter() {
     sessionStorage.setItem('boatFilters', JSON.stringify(filterData));
 }
 
+function selectedFilters() {
+    const container = $('#selected-filters');
+    const section = $('#selected-filters-section');
+    let filtersHTML = '';
+
+    checkedItemsValues.forEach(condition => {
+        filtersHTML += `
+            <li data-type="condition" data-value="${condition}">
+                <span>${condition}</span>
+                <span class="fa fa-close close-filter"></span>
+            </li>
+        `;
+    });
+
+    selectedBrands.forEach(brand => {
+        filtersHTML += `
+            <li data-type="brand" data-value="${brand}">
+                <span>${brand}</span>
+                <span class="fa fa-close close-filter"></span>
+            </li>
+        `;
+    });
+
+    selectedModels.forEach(model => {
+        filtersHTML += `
+            <li data-type="model" data-value="${model}">
+                <span>${model}</span>
+                <span class="fa fa-close close-filter"></span>
+            </li>
+        `;
+    });
+
+    if (filtersHTML) {
+        container.html(filtersHTML);
+        section.show();
+    } else {
+        section.hide();
+    }
+}
+
+function removeSelectedFilter(type, value) {
+    if (type === 'condition') {
+        checkedItemsValues = checkedItemsValues.filter(item => item !== value);
+        $(`.condition-item[value="${value}"]`).prop('checked', false);
+    } else if (type === 'brand') {
+        selectedBrands = selectedBrands.filter(item => item !== value);
+        $(`.brand-item[value="${value}"]`).prop('checked', false);
+    } else if (type === 'model') {
+        selectedModels = selectedModels.filter(item => item !== value);
+        $(`.model-item[value="${value}"]`).prop('checked', false);
+    }
+
+    savedFilter();
+    selectedFilters();
+    setFilterUpdate();
+    fetchedBoats();
+}
+
+$(document).on('click', '.close-filter', function() {
+    const filterItem = $(this).parent();
+    const type = filterItem.data('type');
+    const value = filterItem.data('value');
+    
+    removeSelectedFilter(type, value);
+});
+
 function loadFilters() {
 
     console.log('loading filters');
@@ -27,6 +93,7 @@ function loadFilters() {
         selectedLengthRange = filterData.lengthRange || { min: 0, max: 100 };
         
         applyFiltersToUI();
+        selectedFilters();
         
         if (checkedItemsValues.length > 0 || selectedBrands.length > 0 || selectedModels.length > 0) {
             fetchedBoats();
@@ -84,6 +151,7 @@ function resetFilters() {
     selectedLengthRange = { min: minLength, max: maxLength };
 
     clearfilter();
+    selectedFilters();
     setFilterUpdate();
 
     if ($("#rangeSlider").length) {
@@ -120,6 +188,7 @@ function handleConditionClick(e) {
     })
 
     savedFilter();
+    selectedFilters();
     setFilterUpdate();
     fetchedBoats()
 }
@@ -135,6 +204,7 @@ function handleBrandClick(e) {
         .map(item => item.value);
 
     savedFilter();
+    selectedFilters();
     setFilterUpdate();
     fetchedBoats()
     console.log(selectedBrands)
@@ -153,6 +223,7 @@ function handleModelClick(e) {
     })
 
     savedFilter();
+    selectedFilters();
     fetchedBoats();
 
 }
@@ -371,6 +442,7 @@ $(document).ready(function () {
             };
 
             savedFilter();
+            selectedFilters();
             setFilterUpdate();
             fetchedBoats();
         }
@@ -378,7 +450,7 @@ $(document).ready(function () {
 
     loadFilters();
 
-})
+});
 
 function renderBoats(boats) {
     const boatContainer = $('#boat-listings');
