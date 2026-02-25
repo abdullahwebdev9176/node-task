@@ -47,12 +47,17 @@ function selectedFilters() {
         `;
     });
 
-    filtersHTML += `
-        <li data-type="length" data-value="${selectedLengthRange.min}-${selectedLengthRange.max}">
-            <span>Length: ${selectedLengthRange.min} - ${selectedLengthRange.max}</span>
-            <span class="fa fa-close close-filter"></span>
-        </li>
-    `;
+    const minDefault = parseInt($("#minVal").data("minlength")) || 0;
+    const maxDefault = parseInt($("#maxVal").data("maxlength")) || 100;
+    
+    if (selectedLengthRange.min !== minDefault || selectedLengthRange.max !== maxDefault) {
+        filtersHTML += `
+            <li data-type="length" data-value="${selectedLengthRange.min}-${selectedLengthRange.max}">
+                <span>Length: ${selectedLengthRange.min} - ${selectedLengthRange.max}</span>
+                <span class="fa fa-close close-filter"></span>
+            </li>
+        `;
+    }
 
     if (filtersHTML) {
         container.html(filtersHTML);
@@ -73,11 +78,14 @@ function removeSelectedFilter(type, value) {
         selectedModels = selectedModels.filter(item => item !== value);
         $(`.model-item[value="${value}"]`).prop('checked', false);
     } else if (type === 'length') {
-        selectedLengthRange = { min: 0, max: 100 };
-        if ($("#rangeSlider").length) {
-            $("#rangeSlider").slider("values", [0, 100]);
-            $("#minVal").text(selectedLengthRange.min);
-            $("#maxVal").text(selectedLengthRange.max);
+        const minDefault = parseInt($("#minVal").data("minlength")) || 0;
+        const maxDefault = parseInt($("#maxVal").data("maxlength")) || 100;
+        
+        selectedLengthRange = { min: minDefault, max: maxDefault };
+        if ($("#rangeSlider").length && $("#rangeSlider").hasClass('ui-slider')) {
+            $("#rangeSlider").slider("values", [minDefault, maxDefault]);
+            $("#minVal").text(minDefault);
+            $("#maxVal").text(maxDefault);
         }
     }
 
