@@ -16,6 +16,8 @@ function savedFilter() {
 }
 
 function loadFilters() {
+
+    console.log('loading filters');
     const saved = sessionStorage.getItem('boatFilters');
     if (saved) {
         const filterData = JSON.parse(saved);
@@ -25,6 +27,10 @@ function loadFilters() {
         selectedLengthRange = filterData.lengthRange || { min: 0, max: 100 };
         
         applyFiltersToUI();
+        
+        if (checkedItemsValues.length > 0 || selectedBrands.length > 0 || selectedModels.length > 0) {
+            fetchedBoats();
+        }
     }
 }
 
@@ -48,7 +54,8 @@ function applyFiltersToUI() {
         if (checkbox) checkbox.prop('checked', true);
     });
     
-    if ($("#rangeSlider").length) {
+
+    if ($("#rangeSlider").length && $("#rangeSlider").hasClass('ui-slider')) {
         $("#rangeSlider").slider("values", [selectedLengthRange.min, selectedLengthRange.max]);
         $("#minVal").text(selectedLengthRange.min);
         $("#maxVal").text(selectedLengthRange.max);
@@ -346,7 +353,6 @@ $(document).ready(function () {
     let maxLength = $("#maxVal").data("maxlength") || 100;
 
     selectedLengthRange = { min: minLength, max: maxLength };
-    loadFilters();
 
     $("#rangeSlider").slider({
         range: true,
@@ -369,6 +375,8 @@ $(document).ready(function () {
             fetchedBoats();
         }
     });
+
+    loadFilters();
 
 })
 
