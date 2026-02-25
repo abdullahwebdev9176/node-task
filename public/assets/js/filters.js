@@ -4,6 +4,57 @@ let selectedModels = [];
 let selectedLengthRange = { min: 0, max: 100 };
 
 let wantUpdateFilter = false;
+
+function savedFilter() {
+    const filterData = {
+        conditions: checkedItemsValues,
+        brands: selectedBrands,
+        models: selectedModels,
+        lengthRange: selectedLengthRange
+    };
+    sessionStorage.setItem('boatFilters', JSON.stringify(filterData));
+}
+
+function loadFilters() {
+    const saved = sessionStorage.getItem('boatFilters');
+    if (saved) {
+        const filterData = JSON.parse(saved);
+        checkedItemsValues = filterData.conditions || [];
+        selectedBrands = filterData.brands || [];
+        selectedModels = filterData.models || [];
+        selectedLengthRange = filterData.lengthRange || { min: 0, max: 100 };
+        
+        applyFiltersToUI();
+    }
+}
+
+function clearfilter() {
+    sessionStorage.removeItem('boatFilters');
+}
+
+function applyFiltersToUI() {
+    checkedItemsValues.forEach(value => {
+        const checkbox = $(`.condition-item[value="${value}"]`);
+        if (checkbox) checkbox.prop('checked', true);
+    });
+    
+    selectedBrands.forEach(brand => {
+        const checkbox = $(`.brand-item[value="${brand}"]`);
+        if (checkbox) checkbox.prop('checked', true);
+    });
+
+    selectedModels.forEach(model => {
+        const checkbox = $(`.model-item[value="${model}"]`);
+        if (checkbox) checkbox.prop('checked', true);
+    });
+    
+    if ($("#rangeSlider").length) {
+        $("#rangeSlider").slider("values", [selectedLengthRange.min, selectedLengthRange.max]);
+        $("#minVal").text(selectedLengthRange.min);
+        $("#maxVal").text(selectedLengthRange.max);
+    }
+}
+
 function setFilterUpdate() {
     wantUpdateFilter = true;
 }
@@ -25,6 +76,7 @@ function resetFilters() {
     selectedModels = [];
     selectedLengthRange = { min: minLength, max: maxLength };
 
+    clearfilter();
     setFilterUpdate();
 
     if ($("#rangeSlider").length) {
@@ -60,6 +112,7 @@ function handleConditionClick(e) {
         return i.value;
     })
 
+    savedFilter();
     setFilterUpdate();
     fetchedBoats()
 }
@@ -74,6 +127,7 @@ function handleBrandClick(e) {
         .filter(item => item.checked)
         .map(item => item.value);
 
+    savedFilter();
     setFilterUpdate();
     fetchedBoats()
     console.log(selectedBrands)
@@ -91,6 +145,7 @@ function handleModelClick(e) {
         return item.value;
     })
 
+    savedFilter();
     fetchedBoats();
 
 }
@@ -291,6 +346,7 @@ $(document).ready(function () {
     let maxLength = $("#maxVal").data("maxlength") || 100;
 
     selectedLengthRange = { min: minLength, max: maxLength };
+    loadFilters();
 
     $("#rangeSlider").slider({
         range: true,
@@ -308,6 +364,7 @@ $(document).ready(function () {
                 max: ui.values[1]
             };
 
+            savedFilter();
             setFilterUpdate();
             fetchedBoats();
         }
