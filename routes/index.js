@@ -15,7 +15,8 @@ router.get('/', (req, res) => {
     res.render('home', {
         title: 'Home Page',
         name: name,
-        style: styles
+        style: styles,
+        scripts: getJquery()
     });
 })
 
