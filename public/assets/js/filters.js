@@ -591,8 +591,7 @@ function modelFilter(availableModels) {
 function lengthFilter(minLength, maxLength) {
 
     if ($("#rangeSlider").length) {
-        $("#rangeSlider").slider("option", "min", minLength);
-        $("#rangeSlider").slider("option", "max", maxLength);
+
         $("#rangeSlider").slider("values", [minLength, maxLength]);
         $("#minVal").text(minLength);
         $("#maxVal").text(maxLength);
