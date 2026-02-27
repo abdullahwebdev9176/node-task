@@ -46,10 +46,14 @@ const getFilteredBoats = async (boats) => {
     const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
     const models = [...new Set(boats.map(boat => boat.model.trim()))];
     const length = [...new Set(boats.map(boat => boat.length.trim()))];
+    const year = [...new Set(boats.map(boat => boat.year.trim()))];
     const series = [...new Set(boats.map(boat => boat.series.trim()).filter(series => series !== ''))];
 
     const minLength = Math.min(...length)
     const maxLength = Math.max(...length)
+
+    const minYear = Math.min(...year)
+    const maxYear = Math.max(...year)
 
     const totalBoats = boats.length;
 
@@ -61,6 +65,8 @@ const getFilteredBoats = async (boats) => {
         series,
         minLength,
         maxLength,
+        minYear,
+        maxYear,
         totalBoats
     };
 }

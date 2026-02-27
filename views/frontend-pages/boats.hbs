@@ -108,6 +108,24 @@
                         </div>
                     </div>
 
+                    <div class="filter-condition mb-3">
+                        <div class="filter-title">
+                            <h4>Year</h4>
+                            <span class="fa fa-plus"></span>
+                        </div>
+
+                        <div class="filter-content-wrapper">
+                            <div class="filter-range">
+                                <div class="range-slide-prices">
+                                    <span id="minYearVal" data-minYear="{{minYear}}">{{minYear}}</span>
+                                    <span id="maxYearVal" data-maxYear="{{maxYear}}">{{maxYear}}</span>
+                                </div>
+                                <div id="yearRangeSlider"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <div class="bottom-btns">
                         <button class="mb-2" id="reset-filters" onclick="resetFilters()">Reset
                             Filters</button>

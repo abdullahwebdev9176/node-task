@@ -104,6 +104,18 @@ function removeSelectedFilter(type, value) {
         }
     }
 
+    else if (type === 'year') {
+        const minDefault = parseInt($("#minYearVal").data("minYear")) || 0;
+        const maxDefault = parseInt($("#maxYearVal").data("maxYear")) || 100;
+        
+        selectedYearRange = { min: minDefault, max: maxDefault };
+        if ($("#yearRangeSlider").length && $("#yearRangeSlider").hasClass('ui-slider')) {
+            $("#yearRangeSlider").slider("values", [minDefault, maxDefault]);
+            $("#minYearVal").text(minDefault);
+            $("#maxYearVal").text(maxDefault);
+        }
+    }
+
     savedFilter();
     selectedFilters();
     setFilterUpdate();
@@ -169,6 +181,12 @@ function applyFiltersToUI() {
         $("#minVal").text(selectedLengthRange.min);
         $("#maxVal").text(selectedLengthRange.max);
     }
+
+    if ($("#yearRangeSlider").length && $("#yearRangeSlider").hasClass('ui-slider')) {
+        $("#yearRangeSlider").slider("values", [selectedYearRange.min, selectedYearRange.max]);
+        $("#minYearVal").text(selectedYearRange.min);
+        $("#maxYearVal").text(selectedYearRange.max);
+    }
 }
 
 function setFilterUpdate() {
@@ -201,6 +219,12 @@ function resetFilters() {
         $("#rangeSlider").slider("values", [minLength, maxLength]);
         $("#minVal").text(minLength);
         $("#maxVal").text(maxLength);
+    }
+
+    if ($("#yearRangeSlider").length) {
+        $("#yearRangeSlider").slider("values", [minYear, maxYear]);
+        $("#minYearVal").text(minYear);
+        $("#maxYearVal").text(maxYear);
     }
 
     fetchedBoats();
@@ -486,8 +510,16 @@ $(document).ready(function () {
 
     let minLength = $("#minVal").data("minlength") || 0;
     let maxLength = $("#maxVal").data("maxlength") || 100;
+    let minYear = $("#minYearVal").data("minYear") || 0;
+    let maxYear = $("#maxYearVal").data("maxYear") || 100;
+
+    console.log('min length', minLength);
+    console.log('max length', maxLength);
+    console.log('min year', minYear);
+    console.log('max year', maxYear);
 
     selectedLengthRange = { min: minLength, max: maxLength };
+    selectedYearRange = { min: minYear, max: maxYear };
 
     $("#rangeSlider").slider({
         range: true,
@@ -501,6 +533,30 @@ $(document).ready(function () {
             $("#maxVal").text(ui.values[1]);
 
             selectedLengthRange = {
+                min: ui.values[0],
+                max: ui.values[1]
+            };
+
+            savedFilter();
+            selectedFilters();
+            setFilterUpdate();
+            fetchedBoats();
+        }
+    });
+
+    $("#yearRangeSlider").slider({
+        range: true,
+        min: minYear,
+        max: maxYear,
+        values: [minYear, maxYear],
+        step: 1,
+
+        slide: function (event, ui) {
+            console.log('year range slide', ui.values);
+            $("#minYearVal").text(ui.values[0]);
+            $("#maxYearVal").text(ui.values[1]);
+
+            selectedYearRange = {
                 min: ui.values[0],
                 max: ui.values[1]
             };
@@ -637,5 +693,15 @@ function lengthFilter(minLength, maxLength) {
         $("#rangeSlider").slider("values", [minLength, maxLength]);
         $("#minVal").text(minLength);
         $("#maxVal").text(maxLength);
+    }
+}
+
+function yearFilter(minYear, maxYear) {
+
+    if ($("#yearRangeSlider").length) {
+
+        $("#yearRangeSlider").slider("values", [minYear, maxYear]);
+        $("#minYearVal").text(minYear);
+        $("#maxYearVal").text(maxYear);
     }
 }

@@ -39,7 +39,9 @@ router.get('/:page', async(req, res) => {
     const results = await db.collection('boats').find(typeQuery).limit(settings.boat_limit).toArray();
     const boats = await db.collection('boats').find(typeQuery).toArray();
 
-    const { brands, condition, models, minLength, maxLength, series, totalBoats } = await getFilteredBoats(boats);
+    const { brands, condition, models, minLength, maxLength, series, totalBoats, minYear, maxYear } = await getFilteredBoats(boats);
+
+    console.log('year', minYear, 'max year', maxYear);
 
     const styles = [...jQueryUIStyle(), ...getStyles()];
     const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
@@ -55,6 +57,8 @@ router.get('/:page', async(req, res) => {
         series: series,
         minLength: minLength,
         maxLength: maxLength,
+        minYear: minYear,
+        maxYear: maxYear,
         pageUrl: page,
         style: styles,
         scripts: scripts
