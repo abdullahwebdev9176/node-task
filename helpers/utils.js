@@ -37,8 +37,34 @@ const boats_based_on_types = (type) => {
     }
 };
 
+const getFilteredBoats = async (boats) => {
+    
+    const brands = [...new Set(boats.map(boat => boat.make.trim()))];
+    const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
+    const models = [...new Set(boats.map(boat => boat.model.trim()))];
+    const length = [...new Set(boats.map(boat => boat.length.trim()))];
+    const series = [...new Set(boats.map(boat => boat.series.trim()).filter(series => series !== ''))];
+
+    const minLength = Math.min(...length)
+    const maxLength = Math.max(...length)
+
+    const totalBoats = boats.length;
+
+    return {
+        brands,
+        condition,
+        models,
+        length,
+        series,
+        minLength,
+        maxLength,
+        totalBoats
+    };
+}
+
 module.exports = {
     inventory_urls,
     filter_queries_data,
-    boats_based_on_types
+    boats_based_on_types,
+    getFilteredBoats
 };
