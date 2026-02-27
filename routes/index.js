@@ -55,6 +55,7 @@ router.get('/:page', async(req, res) => {
         series: series,
         minLength: minLength,
         maxLength: maxLength,
+        pageUrl: page,
         style: styles,
         scripts: scripts
     });

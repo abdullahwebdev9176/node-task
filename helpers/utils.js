@@ -4,7 +4,7 @@ const inventory_urls = ['boats-for-sale', 'new-boats-for-sale', 'used-boats-for-
 
 const filter_queries_data = (filterParams) => {
 
-    const { condition, brands, models, lengthRange, skip, limit } = filterParams;
+    const { condition, brands, models, lengthRange, series, skip, limit } = filterParams;
 
     let query = {};
     if (condition.length > 0) {
@@ -15,6 +15,9 @@ const filter_queries_data = (filterParams) => {
     }
     if (models.length > 0) {
         query.model = { $in: models };
+    }
+    if (series.length > 0) {
+        query.series = { $in: series };
     }
     if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
         query.length = {

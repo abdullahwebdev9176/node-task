@@ -1,6 +1,7 @@
 let checkedItemsValues = [];
 let selectedBrands = [];
 let selectedModels = [];
+let selectedSeries = [];
 let selectedLengthRange = { min: 0, max: 100 };
 
 let wantUpdateFilter = false;
@@ -10,6 +11,7 @@ function savedFilter() {
         conditions: checkedItemsValues,
         brands: selectedBrands,
         models: selectedModels,
+        series: selectedSeries,
         lengthRange: selectedLengthRange
     };
     sessionStorage.setItem('boatFilters', JSON.stringify(filterData));
@@ -47,6 +49,15 @@ function selectedFilters() {
         `;
     });
 
+    selectedSeries.forEach(series => {
+        filtersHTML += `
+            <li data-type="series" data-value="${series}">
+                <span>${series}</span>
+                <span class="fa fa-close close-filter"></span>
+            </li>
+        `;
+    });
+
     const minDefault = parseInt($("#minVal").data("minlength")) || 0;
     const maxDefault = parseInt($("#maxVal").data("maxlength")) || 100;
     
@@ -77,7 +88,11 @@ function removeSelectedFilter(type, value) {
     } else if (type === 'model') {
         selectedModels = selectedModels.filter(item => item !== value);
         $(`.model-item[value="${value}"]`).prop('checked', false);
-    } else if (type === 'length') {
+    } else if (type === 'series') {
+        selectedSeries = selectedSeries.filter(item => item !== value);
+        $(`.series-item[value="${value}"]`).prop('checked', false);
+    } 
+    else if (type === 'length') {
         const minDefault = parseInt($("#minVal").data("minlength")) || 0;
         const maxDefault = parseInt($("#maxVal").data("maxlength")) || 100;
         
@@ -112,12 +127,13 @@ function loadFilters() {
         checkedItemsValues = filterData.conditions || [];
         selectedBrands = filterData.brands || [];
         selectedModels = filterData.models || [];
+        selectedSeries = filterData.series || [];
         selectedLengthRange = filterData.lengthRange || { min: 0, max: 100 };
         
         applyFiltersToUI();
         selectedFilters();
         
-        if (checkedItemsValues.length > 0 || selectedBrands.length > 0 || selectedModels.length > 0) {
+        if (checkedItemsValues.length > 0 || selectedBrands.length > 0 || selectedModels.length > 0 || selectedSeries.length > 0) {
             fetchedBoats();
         }
     }
@@ -142,7 +158,11 @@ function applyFiltersToUI() {
         const checkbox = $(`.model-item[value="${model}"]`);
         if (checkbox) checkbox.prop('checked', true);
     });
-    
+
+    selectedSeries.forEach(series => {
+        const checkbox = $(`.series-item[value="${series}"]`);
+        if (checkbox) checkbox.prop('checked', true);
+    });
 
     if ($("#rangeSlider").length && $("#rangeSlider").hasClass('ui-slider')) {
         $("#rangeSlider").slider("values", [selectedLengthRange.min, selectedLengthRange.max]);
@@ -170,6 +190,7 @@ function resetFilters() {
     checkedItemsValues = [];
     selectedBrands = [];
     selectedModels = [];
+    selectedSeries = [];
     selectedLengthRange = { min: minLength, max: maxLength };
 
     clearfilter();
@@ -256,6 +277,7 @@ async function fetchedBoats() {
         condition: checkedItemsValues,
         brands: selectedBrands,
         models: selectedModels,
+        series: selectedSeries,
         lengthRange: selectedLengthRange
     }
     try {
@@ -293,6 +315,24 @@ async function fetchedBoats() {
     }
 }
 
+function handleSeriesClick(e) {
+    const seriesItems = document.querySelectorAll('.series-item');
+
+    const seriesArray = [...seriesItems];
+
+    selectedSeries = seriesArray.filter((item) => {
+        return item.checked;
+    }).map((item) => {
+        return item.value;
+    })
+
+    savedFilter();
+    selectedFilters();
+    fetchedBoats();
+
+}
+
+
 let skipBoats = 12;
 const limitBoats = 12;
 
@@ -304,6 +344,7 @@ async function loadMoreBoats() {
             condition: checkedItemsValues,
             brands: selectedBrands,
             models: selectedModels,
+            series: selectedSeries,
             lengthRange: selectedLengthRange,
             skip:skipBoats,
             limit:limitBoats
@@ -341,6 +382,7 @@ async function boatsPagination() {
         condition: checkedItemsValues,
         brands: selectedBrands,
         models: selectedModels,
+        series: selectedSeries,
         lengthRange: selectedLengthRange,
         page: currentPage
     }
