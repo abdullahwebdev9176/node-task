@@ -3,6 +3,7 @@ let selectedBrands = [];
 let selectedModels = [];
 let selectedSeries = [];
 let selectedLengthRange = { min: 0, max: 100 };
+let selectedYearRange = { min: 0, max: 100 };
 
 let wantUpdateFilter = false;
 
@@ -12,7 +13,8 @@ function savedFilter() {
         brands: selectedBrands,
         models: selectedModels,
         series: selectedSeries,
-        lengthRange: selectedLengthRange
+        lengthRange: selectedLengthRange,
+        yearRange: selectedYearRange
     };
     sessionStorage.setItem('boatFilters', JSON.stringify(filterData));
 }
@@ -70,6 +72,18 @@ function selectedFilters() {
         `;
     }
 
+    const minYearDefault = parseInt($("#minYearVal").data("minyear")) || 0;
+    const maxYearDefault = parseInt($("#maxYearVal").data("maxyear")) || 100;
+    
+    if (selectedYearRange.min !== minYearDefault || selectedYearRange.max !== maxYearDefault) {
+        filtersHTML += `
+            <li data-type="year" data-value="${selectedYearRange.min}-${selectedYearRange.max}">
+                <span>Year: ${selectedYearRange.min} - ${selectedYearRange.max}</span>
+                <span class="fa fa-close close-filter"></span>
+            </li>
+        `;
+    }
+
     if (filtersHTML) {
         container.html(filtersHTML);
         section.show();
@@ -105,8 +119,8 @@ function removeSelectedFilter(type, value) {
     }
 
     else if (type === 'year') {
-        const minDefault = parseInt($("#minYearVal").data("minYear")) || 0;
-        const maxDefault = parseInt($("#maxYearVal").data("maxYear")) || 100;
+        const minDefault = parseInt($("#minYearVal").data("minyear")) || 0;
+        const maxDefault = parseInt($("#maxYearVal").data("maxyear")) || 100;
         
         selectedYearRange = { min: minDefault, max: maxDefault };
         if ($("#yearRangeSlider").length && $("#yearRangeSlider").hasClass('ui-slider')) {
@@ -141,6 +155,7 @@ function loadFilters() {
         selectedModels = filterData.models || [];
         selectedSeries = filterData.series || [];
         selectedLengthRange = filterData.lengthRange || { min: 0, max: 100 };
+        selectedYearRange = filterData.yearRange || { min: 0, max: 100 };
         
         applyFiltersToUI();
         selectedFilters();
@@ -204,12 +219,15 @@ function resetFilters() {
 
     let minLength = $("#minVal").data("minlength") || 0;
     let maxLength = $("#maxVal").data("maxlength") || 100;
+    let minYear = $("#minYearVal").data("minyear") || 0;
+    let maxYear = $("#maxYearVal").data("maxyear") || 100;
 
     checkedItemsValues = [];
     selectedBrands = [];
     selectedModels = [];
     selectedSeries = [];
     selectedLengthRange = { min: minLength, max: maxLength };
+    selectedYearRange = { min: minYear, max: maxYear };
 
     clearfilter();
     selectedFilters();
@@ -302,7 +320,8 @@ async function fetchedBoats() {
         brands: selectedBrands,
         models: selectedModels,
         series: selectedSeries,
-        lengthRange: selectedLengthRange
+        lengthRange: selectedLengthRange,
+        yearRange: selectedYearRange
     }
     try {
         const response = await fetch('/get-boats', {
@@ -370,6 +389,7 @@ async function loadMoreBoats() {
             models: selectedModels,
             series: selectedSeries,
             lengthRange: selectedLengthRange,
+            yearRange: selectedYearRange,
             skip:skipBoats,
             limit:limitBoats
         }
@@ -408,6 +428,7 @@ async function boatsPagination() {
         models: selectedModels,
         series: selectedSeries,
         lengthRange: selectedLengthRange,
+        yearRange: selectedYearRange,
         page: currentPage
     }
 
@@ -510,8 +531,8 @@ $(document).ready(function () {
 
     let minLength = $("#minVal").data("minlength") || 0;
     let maxLength = $("#maxVal").data("maxlength") || 100;
-    let minYear = $("#minYearVal").data("minYear") || 0;
-    let maxYear = $("#maxYearVal").data("maxYear") || 100;
+    let minYear = $("#minYearVal").data("minyear") || 0;
+    let maxYear = $("#maxYearVal").data("maxyear") || 100;
 
     console.log('min length', minLength);
     console.log('max length', maxLength);
