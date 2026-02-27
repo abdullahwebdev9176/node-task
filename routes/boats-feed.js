@@ -34,6 +34,7 @@ const runFeed = async () => {
                 make: boatMake,
                 model: boat.model,
                 year: boat.year,
+                series: boat.series,
                 price: boat.price,
                 length: boat.length,
                 condition: boat.condition,

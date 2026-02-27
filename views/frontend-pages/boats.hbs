@@ -58,6 +58,23 @@
 
                     <div class="filter-condition mb-3">
                         <div class="filter-title">
+                            <h4>Series</h4>
+                            <span class="fa fa-plus"></span>
+                        </div>
+
+                        <div class="filter-content-wrapper" id="series-list">
+                            {{#each series}}
+                            <label>
+                                <input type="checkbox" class="series-item" value="{{this}}"
+                                    onclick="handleSeriesClick(event)"> {{this}}
+                            </label>
+                            {{/each}}
+
+                        </div>
+                    </div>
+
+                    <div class="filter-condition mb-3">
+                        <div class="filter-title">
                             <h4>Models</h4>
                             <span class="fa fa-plus"></span>
                         </div>

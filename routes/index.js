@@ -43,6 +43,7 @@ router.get('/:page', async(req, res) => {
     const condition = [...new Set(boats.map(boat => boat.condition.trim()))];
     const models = [...new Set(boats.map(boat => boat.model.trim()))];
     const length = [...new Set(boats.map(boat => boat.length.trim()))];
+    const series = [...new Set(boats.map(boat => boat.series.trim()).filter(series => series !== ''))];
 
     const minLength = Math.min(...length)
     const maxLength = Math.max(...length)
@@ -63,6 +64,7 @@ router.get('/:page', async(req, res) => {
         brands: brands,
         condition: condition,
         models: models,
+        series: series,
         minLength,
         maxLength,
         style: styles,
