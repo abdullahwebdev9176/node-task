@@ -43,6 +43,9 @@ router.get('/:page', async(req, res) => {
 
     console.log('year', minYear, 'max year', maxYear);
 
+    const totalPages = Math.ceil(totalBoats / settings.boat_limit);
+    const currentPage = parseInt(page) || 1;
+
     const styles = [...jQueryUIStyle(), ...getStyles()];
     const scripts = [...getJquery(), ...jQueryUIScript(), ...getFilter()];
 
@@ -60,6 +63,8 @@ router.get('/:page', async(req, res) => {
         minYear: minYear,
         maxYear: maxYear,
         pageUrl: page,
+        totalPages: totalPages,
+        currentPage: currentPage,
         style: styles,
         scripts: scripts
     });
