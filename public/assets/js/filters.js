@@ -5,6 +5,9 @@ let selectedSeries = [];
 let selectedLengthRange = { min: 0, max: 100 };
 let selectedYearRange = { min: 0, max: 100 };
 
+let skipBoats = 12;
+const limitBoats = 12;
+
 let wantUpdateFilter = false;
 
 function savedFilter() {
@@ -375,14 +378,16 @@ function handleSeriesClick(e) {
 
 }
 
-
-let skipBoats = 12;
-const limitBoats = 12;
-
 async function loadMoreBoats() {
 
     try {
 
+        const currentPage = $('#load-more').attr('current-page');
+        const skipedBoats = currentPage * limitBoats;
+        const pageUrl = $('#load-more').attr('page-url');
+
+        console.log('current page', currentPage);
+        console.log('skip boats', skipedBoats);
         const payload = {
             condition: checkedItemsValues,
             brands: selectedBrands,
@@ -390,25 +395,21 @@ async function loadMoreBoats() {
             series: selectedSeries,
             lengthRange: selectedLengthRange,
             yearRange: selectedYearRange,
-            skip:skipBoats,
+            skip:skipedBoats,
             limit:limitBoats
         }
 
-        const response = await fetch(`/load-more-boats`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
+        const response = await fetch(`${pageUrl}?skip=${skipedBoats}&limit=${limitBoats}`, {
+            method: 'GET',
         });
 
         if (response.ok) {
             const data = await response.json();
             console.log('boats length', data.boats.length);
             renderLoadMoreBoats(data.boats);
-            skipBoats = skipBoats + limitBoats;
+            skipedBoats = skipedBoats + limitBoats;
 
-            console.log('skip boats', skipBoats);
+            console.log('skip boats', skipedBoats);
 
         } else {
             console.error('load more failed');
