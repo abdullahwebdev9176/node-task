@@ -88,6 +88,7 @@ function selectedFilters() {
         container.html(filtersHTML);
         section.show();
     } else {
+        container.html('');
         section.hide();
     }
 }
