@@ -411,6 +411,10 @@ async function loadMoreBoats() {
 
             console.log('skip boats', skipBoats);
 
+            if (data.boats.length < limitBoats) {
+                    document.getElementById('load-more').style.display = 'none';
+                }
+
         } else {
             console.error('load more failed');
         }
