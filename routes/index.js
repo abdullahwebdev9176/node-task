@@ -86,6 +86,24 @@ router.post('/get-boats', async (req, res) => {
 
 })
 
+router.post('/load-more-boats', async (req, res) => {
+    const db = getDB();
+
+    console.log('query params', req.body);
+
+    const { skip, limit } = req.body;
+
+    const skipBoat = parseInt(skip) || 0;
+    const limitBoat = parseInt(limit) || settings.boat_limit;
+
+    let query = filter_queries_data(req.body);
+
+    const boats = await db.collection('boats').find(query).skip(skipBoat).limit(limitBoat).toArray();
+    res.json({
+        boats: boats
+    });
+})
+
 router.post('/boat-search', async (req, res) => {
     const db = getDB();
 
@@ -128,6 +146,55 @@ router.post('/boat-search', async (req, res) => {
     })
 })
 
+// router.post('/boats-pagination', async (req, res) => {
+//     const db = getDB();
+
+//     const { condition, brands, models, lengthRange, page } = req.body;
+
+//     const currentPage = parseInt(page || 1);
+//     const limit = settings.boat_limit || 12;
+//     const skip = (currentPage - 1) * limit;
+
+//     let query = {};
+
+//     if (condition.length > 0) {
+//         query.condition = { $in: condition };
+//     }
+//     if (brands.length > 0) {
+//         query.make = { $in: brands };
+//     }
+//     if (models.length > 0) {
+//         query.model = { $in: models };
+//     }
+    
+//     if (lengthRange && lengthRange.min !== undefined && lengthRange.max !== undefined) {
+//         query.length = {
+//             $gte: lengthRange.min.toString(),
+//             $lte: lengthRange.max.toString(),
+
+//         };
+//     }
+
+//     // console.log('skip boats', query);
+
+//     const boats = await db.collection('boats').find(query).skip(skip).limit(limit).toArray();
+//     const totalsBoats = await db.collection('boats').find({}).count();
+
+//     console.log('totalsBoats', totalsBoats);
+
+//     const totalPages = Math.ceil(totalsBoats / limit);
+
+//     console.log('result', boats.length);
+//     console.log('total pages', totalPages);
+
+//     res.json({
+//         boats: boats,
+//         totalsBoats: totalsBoats,
+//         page: currentPage,
+//         skip: skip,
+//         totalPages: totalPages
+//     });
+// })
 
 router.get('/boat-details/:id', async (req, res) => {
     const db = getDB();
